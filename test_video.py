@@ -22,12 +22,11 @@ def main():
 
             if ret is not True:
                 print("Ending")
-                # time.sleep(2)
+                # sys.exit()
 
             if image is None:
                 break
 
-            # image = image_utils.ensure_grayscale(image)
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
             # for debug
