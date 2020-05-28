@@ -7,13 +7,24 @@ create a condo env(py3.6) for this project
 install opencv via pip
 install matplotlib, numpy and other libs on conda(optional)
 
-write a simple loop to capture every frame and display for the first start.
+write a simple loop to capture every frame and display  from the test video for the first start.
 
 install/compile openalpr(https://github.com/openalpr/openalpr/wiki/Compilation-instructions-(Ubuntu-Linux)) and tesseract-ocr(https://tesseract-ocr.github.io/tessdoc/Home.html)
 But, failed on alpr -c us ea7the.jpg (https://github.com/openalpr/openalpr/wiki/Compilation-instructions-(Ubuntu-Linux)), seem tesseract or lib installation not complete
 
-try docker way to test openalpr for now
+try docker way to test openalpr for now, althoug it is 
 
 install sqlite and sqlite-browser
 create database and table
+insert data into the table
 
+build the first application by combining the video, openalpr and sqlite
+
+issue: openalpr can't detect any plate number from the test video
+test openalpr cloud api successfully: maybe the cloud api has some improvement based on the open source. That's why the cloud api is not free.
+
+question: 
+how to deal with multiple cars?
+
+todo:
+compile install openalpr for performance, need to fix tesseract install issue
