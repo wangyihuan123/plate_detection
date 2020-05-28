@@ -1,5 +1,4 @@
 import uuid
-
 import cv2
 import sys
 import os
@@ -11,7 +10,7 @@ import sqlite3
 
 def test_openalpr():
     # txt = os.system("docker run -it --rm -v $(pwd):/data:ro openalpr -c eu MY02ZR0.jpg | sed -n '2p'"))
-    res = subprocess.getstatusoutput("docker run -it --rm -v $(pwd):/data:ro openalpr -c eu frame.jpg | sed -n '2p'")
+    res = subprocess.getstatusoutput("docker run -it --rm -v $(pwd):/data:ro openalpr -c eu frame.png | sed -n '2p'")
     print(res)
     if res[1] is '':
         return None, None
@@ -56,7 +55,7 @@ def main(debug):
 
             if ret is not True:
                 print("Ending")
-                print("{} frames in all in the test video".format(image_count))
+                print("{} frames in the test video".format(image_count))  # 4681 frames inall
                 sys.exit()
 
             if image is None:
@@ -64,10 +63,13 @@ def main(debug):
                 print(image_count)
                 break
 
-            # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            if image_count % 100 != 0:
+                continue
+
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             save_time = time.time()
-            cv2.imwrite("frame.jpg", image)
-            print("[save image time]: {}".format( time.time() -  save_time))
+            cv2.imwrite("frame.png", image)
+            # print("[save image time]: {}".format( time.time() -  save_time))
 
             # for debug
             if debug:
@@ -91,7 +93,7 @@ def main(debug):
             if plate is None or score is None:
                 print("No result from openalpr")
                 continue
-
+            print("************************************************")
             print("[Plate]: {}, [Confidence]: {}".format(plate, score))
 
             #
