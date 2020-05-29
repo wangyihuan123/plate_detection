@@ -132,28 +132,39 @@ def main(debug):
 
             print(".....", image_count)
 
-            #
-            start_time = time.time()
-            json_result = openalpr_cloud(image)
-            stop_time = time.time()
-            openalpr_time = stop_time - start_time
-            print("[Openalpr Time]: {}".format(openalpr_time), flush=True)
+            jsonresult_name = "./running_data/openalpr_cloud_result_" + str(image_count) + ".json"
+            if not os.path.exists(jsonresult_name):
+                start_time = time.time()
+                json_result = openalpr_cloud(image)
+                stop_time = time.time()
+                openalpr_time = stop_time - start_time
+                print("From cloud - [Openalpr Time]: {}".format(openalpr_time), flush=True)
 
-            # sys.exit()
-            if json_result is None:
-                print("No result from openalpr")
-                continue
+
+                if json_result is None:
+                    print("No result from openalpr")
+                    continue
+
+                # write the result to a json file to save my cloud account credit
+                with open(jsonresult_name, 'w', encoding='utf-8') as f:
+                    json.dump(json_result, f, ensure_ascii=False, indent=4)
+
+            else:
+                with open(jsonresult_name, 'r') as f:
+                    json_result = json.load(f)
+
+
             if json_result["error"] == "false":
                 print(json_result["error_code"])
                 print(json_result["error"])
-
-            print(json.dumps(json_result, indent=2))
+                continue
 
             if json_result["results"] is None:
                 print("No result from openalpr")
                 continue
 
             print("************************************************")
+            print(json.dumps(json_result, indent=2))
             detected_objects = json_result["results"]
             epoch_time = json_result["epoch_time"]
             print("epoch_time", epoch_time)
