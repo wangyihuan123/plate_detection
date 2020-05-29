@@ -23,8 +23,24 @@ build the first application by combining the video, openalpr and sqlite
 issue: openalpr can't detect any plate number from the test video
 test openalpr cloud api successfully: maybe the cloud api has some improvement based on the open source. That's why the cloud api is not free.
 
+investigating:
+the previous is OpenALPR  CarCheck API which is very slow, about 10 second per request
+
+I'm also checking commercial SDK.....  
+
+alter the database table so that the whole json result can be saved in db.
+
+
+
+
+
 question: 
-how to deal with multiple cars?
+how to deal with multiple cars? should be fine, because the json_result is an array based on vehicles, not plates.
+bad angle: using orientation from openalpr_result
 
 todo:
 compile install openalpr for performance, need to fix tesseract install issue
+
+install commercial SDK
+
+

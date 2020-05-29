@@ -13,7 +13,12 @@ def cloudAPI():
 
     url = 'https://api.openalpr.com/v2/recognize_bytes?recognize_vehicle=1&country=nz&secret_key=%s' % (OPENALPR_CLOUD_SECRET_KEY)
     r = requests.post(url, data=img_base64)
-    print(json.dumps(r.json(), indent=2))
+    json_result = r.json()
+    # print(json.dumps(r.json(), indent=2))
+    print(json_result['img_width'])
+    print(json_result['results'])
+    print(json_result['results'][0]['plate'])
+    print(json_result['results'][0]['coordinates'])
 
 if __name__ == '__main__':
     cloudAPI()
