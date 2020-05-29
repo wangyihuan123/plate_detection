@@ -13,26 +13,19 @@ import base64
 import json
 
 
-def test_openalpr():
-    # txt = os.system("docker run -it --rm -v $(pwd):/data:ro openalpr -c eu MY02ZR0.jpg | sed -n '2p'"))
-    res = subprocess.getstatusoutput("docker run -it --rm -v $(pwd):/data:ro openalpr -c us frame.png | sed -n '2p'")
-    print(res)
-    if res[1] is '':
-        return None, None
+TEST_FRAMES = [300, 1200, 1800, 2200, 2700, 3000, 3600, 4000, 4500]
+# TEST_PLATES = ["WAX081", "XFG774", "1HG9TF", "WCW856", "ZPR916", "1FL2KF", "1JQ7RG","unknown", "AXZ074"]  # the last second is unknown
 
-    record = res[1].split("    - ")[1].split("\t confidence: ")
-    print(record)
-    # return plate_str, confidence
-    return record[0], record[1]
 
+# 4681 frames in 157 seconds, around 30 fps
+TEST_VIDEO = "./test_data/Ardeer.mp4"
+
+# OPENALPR_CLOUD_SECRET_KEY = 'sk_013361c164cbbedb0b82f609'  #d
+OPENALPR_CLOUD_SECRET_KEY = 'sk_909a58e3f424cf0db07b7583'
 
 def insert_data(uuid, plate, confidence, processing_time_ms, epoch_time):
     conn = sqlite3.connect('./mydata.db')
     cursor = conn.cursor()
-
-    # if not os.path.exists("frame.jpg"):
-    #     print("frame.jpg not exist")
-    #     return
 
     cursor.execute("INSERT INTO OPENALPR \
                     (UUID, PLATE, CONFIDENCE, PROCESSING_TIME_MS, EPOCH_TIME) \
@@ -44,17 +37,8 @@ def insert_data(uuid, plate, confidence, processing_time_ms, epoch_time):
     print("Inserted data.")
 
 
-# OPENALPR_CLOUD_SECRET_KEY = 'sk_013361c164cbbedb0b82f609'  #d
-OPENALPR_CLOUD_SECRET_KEY = 'sk_909a58e3f424cf0db07b7583'
-
 
 def openalpr_cloud(image):
-    # cv2.imshow('image', image)
-    # cv2.waitKey()
-    # IMAGE_PATH = './running_data/frame_1200.png'
-    # with open(IMAGE_PATH, 'rb') as image_file:
-    #     img_base64 = base64.b64encode(image_file.read())
-
     success, encoded_image = cv2.imencode('.png', image)
     img_base64 = base64.b64encode(encoded_image.tobytes())
 
@@ -67,21 +51,30 @@ def openalpr_cloud(image):
     return None
 
 
-def denoising(img):
-    # img = cv2.imread('frame.png')
-    dst = cv2.fastNlMeansDenoisingColored(img, None, 10, 10, 7, 21)
+def denoising(image, debug):
+    denoised_image = cv2.fastNlMeansDenoisingColored(image, None, 10, 10, 7, 21)
     # cv.fastNlMeansDenoisingColoredMulti()
-    cv2.imwrite("frame_denoise.png", dst)
+
+    if debug:
+        cv2.imwrite("frame_denoise.png", denoised_image)
+
+    return denoised_image
 
 
-# TEST_FRAMES = [300, 1200, 1800, 2200, 2700, 3000, 3600, 4000, 4500]
-# TEST_PLATES = ["WAX081", "XFG774", "1HG9TF", "WCW856", "ZPR916", "1FL2KF", "1JQ7RG","unknown", "AXZ074"]  # the last second
-TEST_FRAMES = [1200, 4000]
-TEST_PLATES = ["XFG774", "unknown"]
-TEST_VIDEO = "./test_data/Ardeer.mp4"
+def debug_image(image, image_count):
+    cv2.imshow('image', image)
 
+    # key control
+    k = cv2.waitKey(1)
+    k = k & 0xFF
+    if k == ord('q'):
+        print("========= Quit by command ==========")
+        sys.exit()
 
-# 4681 frames in 157 seconds, around 30 fps
+    # save the image for easy check
+    image_name = "./running_data/frame_" + str(image_count) + ".png"
+    if not os.path.exists(image_name):
+        cv2.imwrite(image_name, image)
 
 def main(debug):
     cv2.namedWindow('image')
@@ -91,12 +84,13 @@ def main(debug):
         sys.exit()
 
     try:
-        image_count = 0
+        image_count = 0  # the number of frame in the video
         while True:
             image_count += 1
             grab_time = datetime.datetime.now()
             ret, image = cap.read()
-            # print("[grab frame time]: {}".format( datetime.datetime.now() -  grab_time))
+            if debug:
+                print("[grab frame time]: {}".format( datetime.datetime.now() -  grab_time))
 
             if ret is not True:
                 print("Ending")
@@ -112,37 +106,29 @@ def main(debug):
             if image_count not in TEST_FRAMES:
                 continue
 
-            # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            image_name = "./running_data/frame_" + str(image_count) + ".png"
-            if not os.path.exists(image_name):
-                # save_time = time.time()
-                cv2.imwrite(image_name, image)
-                # print("[save image time]: {}".format( time.time() -  save_time))
-
             # for debug
             if debug:
-                cv2.imshow('image', image)
+                debug_image(image, image_count)
+                print("------------- Frame {} ----------------".format(image_count))
 
-            # key control
-            k = cv2.waitKey(1)
-            k = k & 0xFF
-            if k == ord('q'):
-                print("========= Quit by command ==========")
-                break
+            # check image quality: blur image
+            # todo: use multiple images for denoising or super-
+            sharpness = cv2.Laplacian(image, cv2.CV_64F).var()
+            if sharpness < 80:
+                continue
 
-            print(".....", image_count)
-
+            # for easy testing and debugging:
+            # Skip detection from cloud api, if the frame has been already detected before
             jsonresult_name = "./running_data/openalpr_cloud_result_" + str(image_count) + ".json"
             if not os.path.exists(jsonresult_name):
                 start_time = time.time()
                 json_result = openalpr_cloud(image)
                 stop_time = time.time()
                 openalpr_time = stop_time - start_time
-                print("From cloud - [Openalpr Time]: {}".format(openalpr_time), flush=True)
-
+                print("From cloud api - [Openalpr Time]: {}".format(openalpr_time), flush=True)
 
                 if json_result is None:
-                    print("No result from openalpr")
+                    print("Error Frame {}: json result from openalpr is None. ".format(image_count))
                     continue
 
                 # write the result to a json file to save my cloud account credit
@@ -166,11 +152,12 @@ def main(debug):
             print("************************************************")
             print(json.dumps(json_result, indent=2))
             detected_objects = json_result["results"]
+
+            # Since there may have several cars or plates in one image, or maybe video in the future
+            # epoch time can be used to identify one request/response from alpr cloud api
+            #
             epoch_time = json_result["epoch_time"]
             print("epoch_time", epoch_time)
-            # processing_time_total = json_result["processing_time"]["total"]
-            # processing_time_plates = json_result["processing_time"]["plates"]
-            # processing_time_vehicles = json_result["processing_time"]["vehicles"]
 
             print("---------------------------------------")
             for car in detected_objects:
@@ -180,7 +167,7 @@ def main(debug):
                 print("[Plate]: {}, [Confidence]: {}, [Processing_time]: {}".format(plate, plate_confidence,
                                                                                     processing_time_ms))
 
-                # angle check: skip bad angle?30 degree?
+                # angle check: skip if  bad angle? 30 degree?
                 # orientation = car["vehicle"]["orientation"][0]  # only get the orientation with the highest confidence
                 # if orientation["confidence"] > 90:
                 #     if orientation["name"] > 30:
