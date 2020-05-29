@@ -27,17 +27,17 @@ def alter_table_openalpr():
     drop_table = '''DROP TABLE IF EXISTS OPENALPR;'''
     cursor.execute(drop_table)
 
-    create_table = '''CREATE TABLE IF NOT EXISTS OPENALPR
+    create_table = '''CREATE TABLE OPENALPR
        (UUID                    TEXT PRIMARY KEY  NOT NULL,
        PLATE                    TEXT  NOT NULL,
-       CONFIDENCE               FLOAT  NOT NULL,
-       PROCESSING_TIME_MS       FLOAT NOT NULL,
-       EPOCH_TIME               INT NOT NULL
+       CONFIDENCE               NUMERIC  NOT NULL,
+       PROCESSING_TIME_MS       NUMERIC NOT NULL,
+       EPOCH_TIME               INTEGER NOT NULL
        );'''
     cursor.execute(create_table)
     cursor.close()
     conn.close()
-    print("altered new table")
+    print("altered table")
 
 if __name__ == '__main__':
     alter_table_openalpr()
