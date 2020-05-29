@@ -49,10 +49,14 @@ OPENALPR_CLOUD_SECRET_KEY = 'sk_909a58e3f424cf0db07b7583'
 
 
 def openalpr_cloud(image):
-    cv2.imshow('image', image)
-    cv2.waitKey()
-    print("xxxxxxxxxxxxxxxxxxxxxxxxxx")
-    img_base64 = base64.b64encode(image)
+    # cv2.imshow('image', image)
+    # cv2.waitKey()
+    # IMAGE_PATH = './running_data/frame_1200.png'
+    # with open(IMAGE_PATH, 'rb') as image_file:
+    #     img_base64 = base64.b64encode(image_file.read())
+
+    success, encoded_image = cv2.imencode('.png', image)
+    img_base64 = base64.b64encode(encoded_image.tobytes())
 
     url = 'https://api.openalpr.com/v2/recognize_bytes?recognize_vehicle=1&country=nz&secret_key=%s' % (
         OPENALPR_CLOUD_SECRET_KEY)
@@ -104,14 +108,15 @@ def main(debug):
                 print(image_count)
                 break
 
+            # only for testing
             if image_count not in TEST_FRAMES:
                 continue
 
             # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            imagename = "./running_data/frame_" + str(image_count) + ".png"
-            if not os.path.exists(imagename):
+            image_name = "./running_data/frame_" + str(image_count) + ".png"
+            if not os.path.exists(image_name):
                 # save_time = time.time()
-                cv2.imwrite(imagename, image)
+                cv2.imwrite(image_name, image)
                 # print("[save image time]: {}".format( time.time() -  save_time))
 
             # for debug
@@ -156,7 +161,6 @@ def main(debug):
             # processing_time_plates = json_result["processing_time"]["plates"]
             # processing_time_vehicles = json_result["processing_time"]["vehicles"]
 
-            print(json.dumps(json_result, indent=2))
             print("---------------------------------------")
             for car in detected_objects:
                 plate = car["plate"]
@@ -191,9 +195,6 @@ if __name__ == '__main__':
     parser.add_argument('--debug',
                         action='store_true',
                         help='Print all debug info')
-
-    #
-    parser.add_argument('--verbose', help='Enable debug logging', action="store_true")
 
     args = parser.parse_args()
     main(args.debug)
