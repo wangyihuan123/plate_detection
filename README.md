@@ -1,4 +1,27 @@
 
+
+
+
+
+
+------------------------
+
+Ver 0.2
+
+All the controller => debugger: opencv, terminal, filesystem 
+
+todo: 
+pipeline framework
+every second
+handful 2-3 frames
+send them!!
+log
+
+using cascade pipeline framework, so that each engine can be implemented as a more efficient unit in the future, 
+such as fork a process, using concurrent.future, invoke a build c/c++ lib
+
+
+
 -------------------------
 
 Ver 0.1  
