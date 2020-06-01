@@ -30,7 +30,7 @@ class OpenalprEngine(BaseQueueEngine):
 
     def process(self, nextFrame):
 
-        frame = nextFrame.getTextureImage()
+        frame = nextFrame.getImage()
         image_id = nextFrame.getFrameId()
 
         start_time = time.time()

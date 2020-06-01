@@ -29,7 +29,7 @@ depth_extn = '.npz'
 
 class FilesystemController(ThreadedEngineController):
     """
-    1. All the texture images, depth images, detectionresult json saved in the output_dir before upload
+    1. All the detectionresult json saved in the output_dir before upload
     2. saved_summary.log and uploaded_summary.log record all the saved and uploaded files
     3. heartbeat_run() only check whether or not we can contact aws S3 bucket
     4. After being uploaded, the local files in output dir would be deleted
@@ -119,7 +119,7 @@ class FilesystemController(ThreadedEngineController):
 
 
     def notify_save_files(self, frame):
-        image = frame.getTextureImage()
+        image = frame.getImage()
         frame_id = frame.getFrameId()
         json_result3 = frame.getDetectionResult()
         t = threading.Thread(target=FilesystemController.application_engine_file_writer,

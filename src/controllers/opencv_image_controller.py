@@ -51,12 +51,12 @@ class OpencvImageController(ThreadedEngineController):
             cv2.imshow(WINDOW_NAME, np.zeros((100, 100, 3), np.uint8))
 
     def notify_frame_data(self, frameData):
-        texture_image = frameData.getTextureImage()
-        if len(texture_image.shape) == 2:
-            texture_image = cv2.cvtColor(texture_image, cv2.COLOR_GRAY2BGR)
+        image = frameData.getImage()
+        if len(image.shape) == 2:
+            image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
         print("notify_frame_data")
-        self._image_to_show = texture_image
+        self._image_to_show = image
 
     def run(self):
         print(self._engine_shutdown)

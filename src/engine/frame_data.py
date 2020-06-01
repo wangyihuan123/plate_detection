@@ -13,38 +13,16 @@ class FrameData():
 
         self._frame_id = image_id  # uuid.uuid4()
         self._timestamp = time.time()
-        self._ticketROI = None
-        self._tickets = None
-        self._detect_box = None
-        self._depth_detect_box = None
-        self._detect_center_distance = None
-        self._detect_area = None
-        self._plane_roi = None
-        self._plane_centroid = None
-        self._plane_direction = None
-        self._pitch = None
-        self._yaw = None
-        self._cameraPoseOkay = False
-        self._greyValue = 0
-        self._greyDelta = 0
-        self._greyDeltaOkay = False
-        self._quality_score = None
-        self._polygon_points = None
-        self._point3d = None
-        self._point2d = None
-        self._plane_map = None
-
-
         self._frame = frame
 
         if not headless:
-            self._display_depth_image = frame
+            self._display_image = frame
 
     def dumpFrame(self):
 
         frame_uuid = str(self._frame_id)
 
-        cv2.imwrite(frame_uuid + '-texture.png', self.getTextureImage())
+        cv2.imwrite(frame_uuid + '.png', self.getImage())
 
         metadata = {
             "id": frame_uuid,
@@ -60,15 +38,17 @@ class FrameData():
     def getTimestamp(self):
         return self._timestamp
 
+    def getDisplayImage(self):
+        return self._display_image
 
-    def getDepthDisplayImage(self):
-        return self._display_depth_image
+    def setDisplayImage(self, image):
+        self._display_image = image
 
-    def getTextureImage(self):
+    def getImage(self):
         return self._frame
 
-    def updateTextureImage(self, texture_image):
-        self._frame = texture_image
+    def updateImage(self, image):
+        self._frame = image
 
     def setDetectionResult(self, detection_result):
         self._json_result = detection_result
