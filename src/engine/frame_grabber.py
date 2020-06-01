@@ -32,8 +32,10 @@ class FrameGrabber(object):
         self._pipeline = None
         self._image_id = 0  # valid id start from 1
         self._cap = None
+        self.frames_dir = str(pathlib.Path.cwd()) + "../../running_data/"
 
-    def run(self):
+
+def run(self):
         print("run frame_grabber")
         while self._running:
 
@@ -57,7 +59,7 @@ class FrameGrabber(object):
 
 
             # #############################
-            # test_image = "/home/eva/code/rushdigital/running_data/frame_" + str(self._image_id) + ".png"
+            # test_image = pathlib.Path.joinpath(self.jsonresult_dir, "frame_" + str(self._image_id) + ".png")
             # frame = cv2.imread(test_image)
 
             if frame is None:
@@ -65,16 +67,12 @@ class FrameGrabber(object):
                 print(self._image_id)
                 continue
 
-            cv2.imshow('window_name', frame)
-            cv2.waitKey()
-
             if self._output_queue.full():
                 try:
                     self._output_queue.get(block=False)
                 except queue.Empty:
                     pass
 
-            # print(self._image_id,  frame.shape)
             self._output_queue.put(
                 FrameData(frame, self._image_id, self._headless))
 

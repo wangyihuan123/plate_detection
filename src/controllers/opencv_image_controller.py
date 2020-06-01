@@ -67,24 +67,6 @@ class OpencvImageController(ThreadedEngineController):
                 self._image_to_show = None
                 print("image is not none")
                 k = cv2.waitKey(1)
-                print(k)
-            #
-            # # Mask out all but the equivalent ASCII key code in the low byte
-            # k = k & 0xFF
-            # print(k)
-            # if k == 32:  # SPACE
-            #     if self._controller_state == engine.ApplicationEngine.CONTROLLER_STATE_IDLE:
-            #         self.signal_start_capture()
-            #     elif self._controller_state == engine.ApplicationEngine.CONTROLLER_STATE_RUNNING_CAPTURE:
-            #         self.signal_complete_capture()
-            # elif k == ord('t'):
-            #     self.signal_trigger_down()
-            # elif k == ord('y'):
-            #     self.signal_trigger_up()
-            # elif k == ord('q'):
-            #     self.signal_shutdown()
-            # elif k == ord('u'):
-            #     self.signal_upload()
 
     def __del__(self):
         super(OpencvImageController, self).__del__()

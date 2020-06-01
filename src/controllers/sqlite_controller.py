@@ -10,8 +10,8 @@ import queue
 import glob
 import sys
 import os
-import numpy as np
 import logging
+import pathlib
 
 """
 design this as a controller instead of an engine, because we don't need a real-time database at the moment. so, for simplicity move this from the engine pipeline to controller
@@ -22,7 +22,7 @@ design this as a controller instead of an engine, because we don't need a real-t
 using queue for each tsqlite insert
 """
 
-SQLITE3_DB = '/home/eva/code/rushdigital/mydata.db'
+SQLITE3_DB = str(pathlib.Path.cwd()) + "../../mydata.db"
 
 class SqliteController(ThreadedEngineController):
     """
@@ -101,7 +101,8 @@ same queue, you will need to pass the same Sqlite3Worker object to each thread.
         t.start()
 
     def run(self):
-        # reserve for multi-threads sqlite management
+        # todo: reserve for multi-threads sqlite management
+        # todo: look at this: https://github.com/palantir/sqlite3worker
         while not self._engine_shutdown:
             if not self._enabled:
                 time.sleep(0.5)
