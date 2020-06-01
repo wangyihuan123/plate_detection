@@ -68,6 +68,17 @@ class ApplicationEngine(threading.Thread):
 
             self._command_queue.put(command)
 
+    def clean_outdated_plates(self):
+        if len(self._plates) > 0:
+            # check
+            outdated_plates = []
+            for plate, data in self._plates.items():
+                if t.time() - data["last_epoch_time"] > 3600 * 2:  # set 2 hours now
+                    outdated_plates.append(plate)
+
+            # clean
+            for plate in outdated_plates:
+                del self._plates[plate]
 
     def run_application(self):
 
@@ -101,6 +112,10 @@ class ApplicationEngine(threading.Thread):
                     # print(json.dumps(json_result, indent=2))
                     detected_objects = json_result["results"]
 
+                    # Since there may have several cars or plates in one image, or maybe video in the future
+                    # epoch time can be used to identify one request/response from alpr cloud api
+                    #
+                    epoch_time = json_result["epoch_time"]
 
                     if len(detected_objects) == 0:
                         # can't detect any plate
@@ -126,30 +141,29 @@ class ApplicationEngine(threading.Thread):
                         print("[Plate]: {}, [Confidence]: {}, [Processing_time]: {}".format(plate, plate_confidence,
                                                                                             processing_time_ms))
 
-
+                        # always update, but need to clean outdated records
                         if plate in self._plates:
-                            self._plates[plate] += 1
+                            self._plates[plate] = {"detected_times":self._plates[plate]["detected_times"] + 1,
+                                                   "last_epoch_time": epoch_time}
                         else:
-                            self._plates[plate] = 1
+                            self._plates[plate] = {"detected_times":1, "last_epoch_time": epoch_time}
 
-                        if self._plates[plate] >= self.PLATE_CONFIRMED_TIMES:
+                        if self._plates[plate]["detected_times"] >= self.PLATE_CONFIRMED_TIMES:
 
-                            # Since there may have several cars or plates in one image, or maybe video in the future
-                            # epoch time can be used to identify one request/response from alpr cloud api
-                            #
-                            epoch_time = json_result["epoch_time"]
-                            print("Triple confirmed", plate)
+                            print("Double/Triple confirmed", plate)
                             self._notify_controllers_of_insert_sqlite(plate, plate_confidence, processing_time_ms, epoch_time)
                             self._notify_controllers_of_save_files(nextFrame)
 
                     # other post-processing
                     # self._notify_controllers_of_frame(nextFrame)
 
-
+            # check and clean all outdated records
+            self.clean_outdated_plates()
 
             if self._shutdown_cmd is not None:
                 return None
 
+            # check command queue
             while not self._command_queue.empty():
                 cmd = self._command_queue.get(block=False)
 
