@@ -38,6 +38,9 @@ class ApplicationEngine(threading.Thread):
     CONTROLLER_STATE_IDLE = 1
     CONTROLLER_STATE_RUNNING_CAPTURE = 2
 
+    PLATE_CONFIRMED_TIMES = 2  # 2 for testing, 3 or more for release
+    PLATE_CONFIDENCE_THRESHOLD = 60  # if the confidence is too low, it's better not to trust the result
+
     def __init__(self, headless=False):
         threading.Thread.__init__(self)
 
@@ -53,8 +56,7 @@ class ApplicationEngine(threading.Thread):
 
         self.dirty_exit = False
 
-        self._scaled_logs = dict()
-        self._current_ticket = None
+        self._plate = dict()
 
     def __del__(self):
         for c in self._controllers:
@@ -86,47 +88,15 @@ class ApplicationEngine(threading.Thread):
 
             self._command_queue.put(command)
 
-    def _add_scaled_log(self, uuid, session, ticket, ticketCoordinates, frame):
-        scaled_log = ScaledLog(uuid=uuid,
-                               session=session,
-                               ticket=ticket,
-                               ticketCoordinates=ticketCoordinates,
-                               detectedLog=frame.getDetectBox(),
-                               textureImage=frame.getTextureImage().copy(),
-                               depthImage=frame.getRawDepthImage().copy(),
-                               intrinsics=frame.getSensorIntrinsics(),
-                               depthScale=frame.getDepthScale(),
-                               qualityScore=frame.getQualityScore(),
-                               timestamp=frame.getTimestamp())
-        if uuid not in self._scaled_logs:
-            self._scaled_logs[uuid] = scaled_log
-            self._notify_controllers_of_new_log(scaled_log)
-            self._log.info("uuid: {}. ticket: {}".format(uuid, ticket))
-            return
-
-        existing_ticket = self._scaled_logs[uuid]
-        if scaled_log.qualityScore > existing_ticket.qualityScore:
-            self._scaled_logs[uuid] = scaled_log
-            self._notify_controllers_of_update_log(scaled_log)
 
     def _state_func__run_capture(self):
 
-        self._scaled_logs = dict()
-        self._current_ticket = None
+        self._plates = dict()
         self._trigger_down = False
 
         for e in self._queue_engines:
             e.start()
 
-        # self._notify_controllers_of_state_update(ApplicationEngine.CONTROLLER_STATE_RUNNING_CAPTURE, "Capturing")
-
-        # self._notify_controllers_of_trigger_state(False)
-        # self._notify_engines_of_trigger_state(False)
-
-
-        capture_session_uuid = str(uuid.uuid4())
-        current_trigger_uuid = str(uuid.uuid4())  # only for debug, should delete this later
-        # self._notify_controllers_of_capture_start(capture_session_uuid)
 
         print("start application_engine")
         while True:
@@ -158,29 +128,40 @@ class ApplicationEngine(threading.Thread):
                     epoch_time = json_result["epoch_time"]
                     print("epoch_time", epoch_time)
 
+
+                    if len(detected_objects) == 0:
+                        # can't detect any plate
+                        continue
+
                     print("---------------------------------------")
                     for car in detected_objects:
-                        plate = car["plate"]
+                        good_detection_flag = True
+                        plate = car["plate"]  # todo: do I need to double check the plate?
                         plate_confidence = car["confidence"]
+                        if plate_confidence < self.PLATE_CONFIDENCE_THRESHOLD:
+                            good_detection_flag = False
+                            continue
+
+                        # angle check: skip if  bad angle? 30 degree?
+                        orientation = car["vehicle"]["orientation"][0]  # only get the orientation with the highest confidence
+                        if orientation["confidence"] > 90:
+                            if orientation["name"] > 30:
+                                good_detection_flag = False
+                                continue
+
                         processing_time_ms = car["processing_time_ms"]
                         print("[Plate]: {}, [Confidence]: {}, [Processing_time]: {}".format(plate, plate_confidence,
                                                                                             processing_time_ms))
 
-                        # angle check: skip if  bad angle? 30 degree?
-                        # orientation = car["vehicle"]["orientation"][0]  # only get the orientation with the highest confidence
-                        # if orientation["confidence"] > 90:
-                        #     if orientation["name"] > 30:
-                        #         continue
 
-                        start_time = t.time()
-                        id = str(uuid.uuid4())
-                        self._notify_controllers_of_insert_sqlite(plate, plate_confidence, processing_time_ms, epoch_time)
+                        if plate in self._plates:
+                            self._plates[plate] += 1
+                        else:
+                            self._plates[plate] = 1
 
-                        stop_time = t.time()
-                        sqlite_time = stop_time - start_time
-                        print("[Sqlite Time]: {}".format(sqlite_time))
-
-                        self._notify_controllers_of_save_files(nextFrame)
+                        if self._plates[plate] >= self.PLATE_CONFIRMED_TIMES:
+                            self._notify_controllers_of_insert_sqlite(plate, plate_confidence, processing_time_ms, epoch_time)
+                            self._notify_controllers_of_save_files(nextFrame)
 
                     # other post-processing
                     # self._notify_controllers_of_frame(nextFrame)

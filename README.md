@@ -19,7 +19,7 @@ log
 py2 => py3
 dynamic pipeline:
 
-build new main
+rewrite new main with an application engine and controllers using multiple threads
 build pipeline with frame_grabber, frame_data, application_engine: 6 hours
 add jsonresult_testing_engine for easy testing
 add sqlite engine
@@ -31,7 +31,7 @@ add openalpr engine to get other frames' json result from openalpr cloud
 add preprocessing engine for denoising and image quality check
 
 refactoring jsonresult_testing_engine for multple frames
-
+only consider one plate in one image for now!! So, 2-3 frames for confirmation is easy to avoid detection
 
 add opencv controller for debugging
 add console controller and commands for debugging

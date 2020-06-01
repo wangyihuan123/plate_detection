@@ -44,6 +44,10 @@ class PreprocessingEngine(BaseQueueEngine):
         if sharpness < self.SHARPNESS_THRESHOLD:
             return False
 
+        # bad angle can be checked based on the result of openalpr response["vehicle"]["orientation"]
+
+        # todo: if necessary, can run a small object detection model here as well
+
         nextFrame.updateTextureImage(image)
 
         return True
