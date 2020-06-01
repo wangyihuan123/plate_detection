@@ -40,7 +40,8 @@ class BaseQueueEngine(object):
                 try:
                     nextFrame = self._input_queue.get(block=False)
 
-                    self.process(nextFrame)
+                    if not self.process(nextFrame):  # interrupt the pipeline if process return false
+                        continue
 
                     if self._output_queue.full():
                         self._output_queue.get(block=False)

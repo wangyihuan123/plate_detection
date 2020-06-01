@@ -6,7 +6,8 @@ from .base_engine import BaseQueueEngine
 
 class PreprocessingEngine(BaseQueueEngine):
 
-    """docstring for BoundaryDetector"""
+    GREYVALUE_THRESHOLD = 10
+    SHARPNESS_THRESHOLD = 80
     def __init__(self, input_queue, output_queue):
         super(PreprocessingEngine, self).__init__(input_queue, output_queue)
 
@@ -14,17 +15,36 @@ class PreprocessingEngine(BaseQueueEngine):
         super(PreprocessingEngine, self).stop()
 
     def denoising(self, image):
+        # todo: need to be optimized later
+        # todo: can be extended to multiple images, like cv.fastNlMeansDenoisingColoredMulti
+        # todo: Or to run a super-resolution model, just need to maintain another internal list/dictionary
         denoised_image = cv2.fastNlMeansDenoisingColored(image, None, 10, 10, 7, 21)
-        # cv.fastNlMeansDenoisingColoredMulti()
 
         return denoised_image
 
     def process(self, nextFrame):
 
-        # here can be extended to run a super-resolution model, just need to maintain another internal list/dictionary
         frame = nextFrame.getTextureImage()
 
-        # todo: check bad angle or bad condition?
+        # currently, for a simple case, just use opencv to denoise the image
+        image = self.denoising(frame)
 
-        nextFrame.updateTextureImage(self.denoising(frame))
+        # use greyvalue and sharpness to simply check the bad condition
+
+        # to avoid the images which are too dark:
+        # sometimes the camere may be blocked,
+        # sometimes lights may be broken,
+        # sometimes the whether is terrible
+        image_grey_value = image.mean()
+        if image_grey_value < self.GREYVALUE_THRESHOLD:
+            return False
+
+        # check image quality: skip the blur image
+        sharpness = cv2.Laplacian(image, cv2.CV_64F).var()
+        if sharpness < self.SHARPNESS_THRESHOLD:
+            return False
+
+        nextFrame.updateTextureImage(image)
+
+        return True
 

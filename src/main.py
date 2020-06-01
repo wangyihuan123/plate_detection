@@ -8,12 +8,13 @@ import logging
 from logging.handlers import RotatingFileHandler
 from engine import ApplicationEngine
 from controllers import OpencvImageController, ConsoleController, HeadlessController, SqliteController, FilesystemController
-
-
 import argparse
 
 
-LOGFILE_NAME = 'camera.gun.depth.log'
+TEST_FRAMES = [300, 1200, 1800, 2200, 2700, 3000, 3600, 4000, 4500]
+# TEST_PLATES = ["WAX081", "XFG774", "1HG9TF", "WCW856", "ZPR916", "1FL2KF", "1JQ7RG","unknown", "AXZ074"]  # the last second is unknown
+
+LOGFILE_NAME = 'rushdigital.log'
 
 def main():
     logger = logging.getLogger()

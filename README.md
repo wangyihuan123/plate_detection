@@ -19,17 +19,16 @@ log
 py2 => py3
 dynamic pipeline:
 
-
-build pipeline with frame_grabber, frame_data, application_engine
+build new main
+build pipeline with frame_grabber, frame_data, application_engine: 6 hours
 add jsonresult_testing_engine for easy testing
 add sqlite engine
 convert  sqlite engine to a controller
 refactoring engine and controller
 add filesystem controller for debugging and backup
 
-
-
 add openalpr engine to get other frames' json result from openalpr cloud
+add preprocessing engine for denoising and image quality check
 
 refactoring jsonresult_testing_engine for multple frames
 

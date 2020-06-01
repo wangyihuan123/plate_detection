@@ -18,11 +18,13 @@ class JsonresultTestingEngine(BaseQueueEngine):
         jsonresult_name = "/home/eva/code/rushdigital/running_data/openalpr_cloud_result_" + str(image_count) + ".json"
         if not os.path.exists(jsonresult_name):
             print("????? {} not exist????".format(jsonresult_name))
-            return
+            return False
 
 
         with open(jsonresult_name, 'r') as f:
             json_result = json.load(f)
 
         nextFrame.setDetectionResult(json_result)
+
+        return True
 

@@ -41,9 +41,11 @@ class OpenalprEngine(BaseQueueEngine):
 
         if json_result is None:
             print("Error Frame {}: json result from openalpr is None. ".format(image_id))
-            return
+            # leave the error to application_engine
 
         nextFrame.setDetectionResult(json_result)
+
+        return True
 
         # # backup the jsonresult as a file for debugging and testing
         # jsonresult_name = "./running_data/openalpr_cloud_result_" + str(image_id) + ".json"
