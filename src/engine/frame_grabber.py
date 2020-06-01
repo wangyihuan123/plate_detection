@@ -4,7 +4,6 @@ import threading
 import time as t
 import queue
 import cv2
-import numpy
 from .frame_data import FrameData
 
 TEST_FRAMES = [300, 1200, 1800, 2200, 2700, 3000, 3600, 4000, 4500]
@@ -28,12 +27,9 @@ class FrameGrabber(object):
         self._worker_thread = None
 
         self._running = False
-        self._selection = None
-        self._roi = None
         self._pipeline = None
-        self._config = None
-        self._cap = None
         self._image_id = 0  # valid id start from 1
+        self._cap = None
 
     def run(self):
         print("run frame_grabber")
@@ -53,7 +49,7 @@ class FrameGrabber(object):
             self._image_id += 1
 
             # #############################33
-            self._image_id = 2700
+            self._image_id = 3000
             test_image = "/home/eva/code/rushdigital/running_data/frame_" + str(self._image_id) + ".png"
             frame = cv2.imread(test_image)
             if frame is None:
@@ -78,7 +74,6 @@ class FrameGrabber(object):
             t.sleep(1000000) # stop here to save credit
 
     def start(self):
-        print("start frame_grabber")
 
         # 4681 frames in 157 seconds, around 30 fps
         TEST_VIDEO = "../test_data/Ardeer.mp4"
@@ -109,8 +104,6 @@ class FrameGrabber(object):
                 self._worker_thread.join()
                 self._worker_thread = None
 
-        self._selection = None
-        self._cap = None
 
     def __del__(self):
         pass

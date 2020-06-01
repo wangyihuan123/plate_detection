@@ -33,16 +33,16 @@ add preprocessing engine for denoising and image quality check
 refactoring jsonresult_testing_engine for multple frames
 only consider one plate in one image for now!! So, 2-3 frames for confirmation is easy to avoid detection
 
+add log system
 add opencv controller for debugging
 add console controller and commands for debugging
-build dynamic pipeline frame work
-
 
 add shutdown function to end engines and controllers properly 
-add log system
 tidy up code
 
 
+todo:
+sqliteController can be implemented as a db manager with queue for multiple threads insertions.
 
 
 using cascade pipeline framework, so that each engine can be implemented as a more efficient unit in the future, 
