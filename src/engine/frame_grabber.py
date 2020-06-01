@@ -35,7 +35,7 @@ class FrameGrabber(object):
         self.frames_dir = str(pathlib.Path.cwd()) + "../../running_data/"
 
 
-def run(self):
+    def run(self):
         print("run frame_grabber")
         while self._running:
 
