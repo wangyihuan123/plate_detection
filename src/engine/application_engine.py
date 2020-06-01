@@ -179,6 +179,8 @@ class ApplicationEngine(threading.Thread):
                         sqlite_time = stop_time - start_time
                         print("[Sqlite Time]: {}".format(sqlite_time))
 
+                        self._notify_controllers_of_save_files(nextFrame)
+
                     # other post-processing
                     # self._notify_controllers_of_frame(nextFrame)
 
@@ -261,11 +263,11 @@ class ApplicationEngine(threading.Thread):
             except ReferenceError:
                 self._controllers.remove(c)
 
-    def _notify_controllers_of_save_capture(self, frames):
+    def _notify_controllers_of_save_files(self, frames):
 
         for c in self._controllers[:]:
             try:
-                c.notify_save_capture(frames)
+                c.notify_save_files(frames)
             except ReferenceError:
                 self._controllers.remove(c)
 

@@ -101,34 +101,8 @@ same queue, you will need to pass the same Sqlite3Worker object to each thread.
         t.start()
 
     def run(self):
-
+        # reserve for multi-threads sqlite management
         while not self._engine_shutdown:
             if not self._enabled:
                 time.sleep(0.5)
                 continue
-    # 
-    #         if not self._can_contact_bucket:
-    #             time.sleep(0.5)
-    #             continue
-    # 
-    #         try:
-    #             file_job = self._work_q.get(False)
-    #             try:
-    #                 data = open(file_job, 'rb')
-    #                 file_key = os.path.basename(file_job)
-    #                 disk_file_size = os.stat(file_job).st_size
-    #                 self.bucket.put_object(ACL='public-read', Key=file_key, Body=data)
-    #                 s3_object = self.s3.Object(DEFAULT_AWS_BUCKET_NAME, file_key)
-    # 
-    #                 self.update_summary_file(file_job, self.uploaded_summary_file)
-    #                 if s3_object.content_length == disk_file_size:
-    #                     os.remove(file_job)
-    #                 else:
-    #                     raise Exception('Remote object and local object sizes not the same')
-    #             except Exception as e:
-    #                 print("SqliteController - Exception", e)
-    #                 self._log.error("SqliteController - Exception", e)
-    #                 self._work_q.put(file_job)
-    # 
-    #         except queue.Empty:
-    #             time.sleep(0.1)

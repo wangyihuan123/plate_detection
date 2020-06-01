@@ -53,15 +53,13 @@ class EngineController(object):
         self._logs = dict()
         self._session_uuid = None
 
-    def notify_new_log(self, scaled_log):
-        self._logs[scaled_log.uuid] = scaled_log
-
-    def notify_update_log(self, updated_log):
-        self._logs[updated_log.uuid] = updated_log
-
+    # for sqlite controller
     def notify_insert_sqlite(self, plate, plate_confidence, processing_time_ms, epoch_time):
         pass
 
+    # for filesystem_controller
+    def notify_save_files(self, frame):
+        pass
 
     def signal_shutdown(self):
         if self._engine is not None:

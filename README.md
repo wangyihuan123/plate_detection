@@ -16,6 +16,33 @@ every second
 handful 2-3 frames
 send them!!
 log
+py2 => py3
+dynamic pipeline:
+
+
+build pipeline with frame_grabber, frame_data, application_engine
+add jsonresult_testing_engine for easy testing
+add sqlite engine
+convert  sqlite engine to a controller
+refactoring engine and controller
+add filesystem controller for debugging and backup
+
+add openalpr engine to get other frames' json result from cloud
+
+refactoring jsonresult_testing_engine for multple frames
+
+
+add opencv controller for debugging
+add console controller and commands for debugging
+build dynamic pipeline frame work
+
+
+add shutdown function to end engines and controllers properly 
+add log system
+tidy up code
+
+
+
 
 using cascade pipeline framework, so that each engine can be implemented as a more efficient unit in the future, 
 such as fork a process, using concurrent.future, invoke a build c/c++ lib

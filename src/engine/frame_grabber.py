@@ -53,7 +53,8 @@ class FrameGrabber(object):
             self._image_id += 1
 
             # #############################33
-            test_image = "/home/eva/code/rushdigital/running_data/frame_1200.png"
+            self._image_id = 1200
+            test_image = "/home/eva/code/rushdigital/running_data/frame_" + str(self._image_id) + ".png"
             frame = cv2.imread(test_image)
             if frame is None:
                 print("image is None")

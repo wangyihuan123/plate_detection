@@ -7,15 +7,11 @@ import sys
 import logging
 from logging.handlers import RotatingFileHandler
 from engine import ApplicationEngine
-from controllers import OpencvImageController, ConsoleController, HeadlessController, SqliteController
-# from controllers.console_controller import ConsoleController
-# from controllers.headless_controller import HeadlessController
+from controllers import OpencvImageController, ConsoleController, HeadlessController, SqliteController, FilesystemController
 
 
 import argparse
 
-DEFAULT_WAND_SERIAL_DEVICE = '/dev/ttyUSB1'
-DEFAULT_HWUI_SERIAL_DEVICE = '/dev/ttyUSB0'
 
 LOGFILE_NAME = 'camera.gun.depth.log'
 
@@ -31,10 +27,9 @@ def main():
 
     logger.addHandler(file_handler)
 
-    message = "C3 Log Scaling 2.1 prototype"
+    message = "Rush Digital Programming Challenge"
 
     logger.info(message)
-
 
     parser = argparse.ArgumentParser(description=message)
 
@@ -48,7 +43,7 @@ def main():
     run_headless = args.headless
 
     application_engine = ApplicationEngine()
-
+    filesystem_controller = FilesystemController()
     sqlite_controller = SqliteController()
 
     if not run_headless:
@@ -58,6 +53,7 @@ def main():
     else:
         console_controller = HeadlessController()
 
+    application_engine.register_controller(filesystem_controller)
     application_engine.register_controller(sqlite_controller)
     application_engine.register_controller(console_controller)
     application_engine.start()
