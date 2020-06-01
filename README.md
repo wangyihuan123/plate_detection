@@ -33,9 +33,14 @@ add preprocessing engine for denoising and image quality check
 refactoring jsonresult_testing_engine for multple frames
 only consider one plate in one image for now!! So, 2-3 frames for confirmation is easy to avoid detection
 
+motion blur
+
+todo: what command do we really need??
+
 add log system
-add opencv controller for debugging
-add console controller and commands for debugging
+add opencv controller for debugging: display the detection area
+add console controller and commands for debugging  ??? why need this ??, Yes, so that sometimes we need to stop or frame by frame for debugging, 
+and we can also save the image by command??
 
 add shutdown function to end engines and controllers properly 
 tidy up code

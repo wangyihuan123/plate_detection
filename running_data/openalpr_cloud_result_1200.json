@@ -1,0 +1,324 @@
+{
+    "uuid": "",
+    "data_type": "alpr_results",
+    "epoch_time": 1590714918727,
+    "processing_time": {
+        "total": 1669.3529999993189,
+        "plates": 94.34266662597656,
+        "vehicles": 144.96800000051735
+    },
+    "img_height": 1080,
+    "img_width": 1920,
+    "results": [
+        {
+            "plate": "XFG774",
+            "confidence": 93.0289535522461,
+            "region_confidence": 99,
+            "vehicle_region": {
+                "y": 391,
+                "x": 293,
+                "height": 350,
+                "width": 350
+            },
+            "region": "au-vic",
+            "plate_index": 0,
+            "processing_time_ms": 28.374103546142578,
+            "candidates": [
+                {
+                    "matches_template": 0,
+                    "plate": "XFG774",
+                    "confidence": 93.0289535522461
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "XG774",
+                    "confidence": 77.37110900878906
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "XTG774",
+                    "confidence": 77.2120132446289
+                }
+            ],
+            "coordinates": [
+                {
+                    "y": 608,
+                    "x": 429
+                },
+                {
+                    "y": 610,
+                    "x": 508
+                },
+                {
+                    "y": 641,
+                    "x": 507
+                },
+                {
+                    "y": 639,
+                    "x": 428
+                }
+            ],
+            "vehicle": {
+                "orientation": [
+                    {
+                        "confidence": 99.14813995361328,
+                        "name": "0"
+                    },
+                    {
+                        "confidence": 0.5928558707237244,
+                        "name": "315"
+                    },
+                    {
+                        "confidence": 0.25450965762138367,
+                        "name": "45"
+                    },
+                    {
+                        "confidence": 0.0018547994550317526,
+                        "name": "225"
+                    },
+                    {
+                        "confidence": 0.001503435312770307,
+                        "name": "135"
+                    },
+                    {
+                        "confidence": 0.000592805736232549,
+                        "name": "180"
+                    },
+                    {
+                        "confidence": 0.000334478507284075,
+                        "name": "270"
+                    },
+                    {
+                        "confidence": 0.00020432400924619287,
+                        "name": "missing"
+                    },
+                    {
+                        "confidence": 8.571251782996114e-06,
+                        "name": "90"
+                    }
+                ],
+                "color": [
+                    {
+                        "confidence": 91.19590759277344,
+                        "name": "silver-gray"
+                    },
+                    {
+                        "confidence": 3.089355707168579,
+                        "name": "gold-beige"
+                    },
+                    {
+                        "confidence": 1.9224497079849243,
+                        "name": "black"
+                    },
+                    {
+                        "confidence": 1.2692620754241943,
+                        "name": "brown"
+                    },
+                    {
+                        "confidence": 1.0885530710220337,
+                        "name": "blue"
+                    },
+                    {
+                        "confidence": 1.0367021560668945,
+                        "name": "green"
+                    },
+                    {
+                        "confidence": 0.23876696825027466,
+                        "name": "purple"
+                    },
+                    {
+                        "confidence": 0.07564790546894073,
+                        "name": "red"
+                    },
+                    {
+                        "confidence": 0.049345776438713074,
+                        "name": "pink"
+                    },
+                    {
+                        "confidence": 0.015289212577044964,
+                        "name": "yellow"
+                    }
+                ],
+                "make": [
+                    {
+                        "confidence": 96.3973159790039,
+                        "name": "toyota"
+                    },
+                    {
+                        "confidence": 2.7220118045806885,
+                        "name": "holden"
+                    },
+                    {
+                        "confidence": 0.23094572126865387,
+                        "name": "hyundai"
+                    },
+                    {
+                        "confidence": 0.19399972259998322,
+                        "name": "mazda"
+                    },
+                    {
+                        "confidence": 0.08884382247924805,
+                        "name": "dodge"
+                    },
+                    {
+                        "confidence": 0.08857876062393188,
+                        "name": "kia"
+                    },
+                    {
+                        "confidence": 0.07274698466062546,
+                        "name": "daewoo"
+                    },
+                    {
+                        "confidence": 0.0314769372344017,
+                        "name": "great-wall"
+                    },
+                    {
+                        "confidence": 0.03136041387915611,
+                        "name": "subaru"
+                    },
+                    {
+                        "confidence": 0.028417089954018593,
+                        "name": "honda"
+                    }
+                ],
+                "body_type": [
+                    {
+                        "confidence": 63.01781463623047,
+                        "name": "sedan-standard"
+                    },
+                    {
+                        "confidence": 22.85126495361328,
+                        "name": "van-mini"
+                    },
+                    {
+                        "confidence": 9.532463073730469,
+                        "name": "sedan-compact"
+                    },
+                    {
+                        "confidence": 4.319258689880371,
+                        "name": "sedan-wagon"
+                    },
+                    {
+                        "confidence": 0.12269164621829987,
+                        "name": "truck-standard"
+                    },
+                    {
+                        "confidence": 0.05840390920639038,
+                        "name": "suv-crossover"
+                    },
+                    {
+                        "confidence": 0.027920693159103394,
+                        "name": "tractor-trailer"
+                    },
+                    {
+                        "confidence": 0.025445817038416862,
+                        "name": "sedan-sports"
+                    },
+                    {
+                        "confidence": 0.020790018141269684,
+                        "name": "van-full"
+                    },
+                    {
+                        "confidence": 0.02036512829363346,
+                        "name": "suv-standard"
+                    }
+                ],
+                "year": [
+                    {
+                        "confidence": 83.89069366455078,
+                        "name": "2005-2009"
+                    },
+                    {
+                        "confidence": 13.474414825439453,
+                        "name": "2010-2014"
+                    },
+                    {
+                        "confidence": 2.6140496730804443,
+                        "name": "2000-2004"
+                    },
+                    {
+                        "confidence": 0.015613541007041931,
+                        "name": "2015-2019"
+                    },
+                    {
+                        "confidence": 0.005213696975260973,
+                        "name": "1995-1999"
+                    },
+                    {
+                        "confidence": 1.9378909200895578e-05,
+                        "name": "1990-1994"
+                    },
+                    {
+                        "confidence": 3.914085482392693e-06,
+                        "name": "missing"
+                    },
+                    {
+                        "confidence": 2.28307021643559e-06,
+                        "name": "1980-1984"
+                    },
+                    {
+                        "confidence": 2.1972523711610847e-07,
+                        "name": "1985-1989"
+                    }
+                ],
+                "make_model": [
+                    {
+                        "confidence": 92.23530578613281,
+                        "name": "toyota_corolla"
+                    },
+                    {
+                        "confidence": 1.08895742893219,
+                        "name": "mazda_mpv"
+                    },
+                    {
+                        "confidence": 0.6553223729133606,
+                        "name": "toyota_runx"
+                    },
+                    {
+                        "confidence": 0.6466932892799377,
+                        "name": "toyota_fielder"
+                    },
+                    {
+                        "confidence": 0.5177455544471741,
+                        "name": "toyota_corolla-altis"
+                    },
+                    {
+                        "confidence": 0.4378262758255005,
+                        "name": "toyota_ipsum"
+                    },
+                    {
+                        "confidence": 0.3462216258049011,
+                        "name": "toyota_avensis-verso"
+                    },
+                    {
+                        "confidence": 0.2624344825744629,
+                        "name": "toyota_echo"
+                    },
+                    {
+                        "confidence": 0.2427198439836502,
+                        "name": "toyota_matrix"
+                    },
+                    {
+                        "confidence": 0.18750330805778503,
+                        "name": "dodge_grand-caravan"
+                    }
+                ]
+            },
+            "matches_template": 0,
+            "requested_topn": 10
+        }
+    ],
+    "credits_monthly_used": 3,
+    "version": 2,
+    "credits_monthly_total": 50,
+    "error": false,
+    "regions_of_interest": [
+        {
+            "y": 0,
+            "x": 0,
+            "height": 1080,
+            "width": 1920
+        }
+    ],
+    "credit_cost": 1
+}

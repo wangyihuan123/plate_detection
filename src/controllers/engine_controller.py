@@ -20,12 +20,6 @@ class EngineController(object):
 
         self._engine = None
         self._engine_shutdown = False
-        self._controller_state = engine.ApplicationEngine.CONTROLLER_STATE_INACTIVE
-        self._status_txt = "Inactive"
-
-        self._trigger_down = False
-
-        self._logs = dict()
         self._session_uuid = None
 
     def notify_start(self):

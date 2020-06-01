@@ -49,8 +49,8 @@ def main():
 
     if not run_headless:
         console_controller = ConsoleController()
-        interface_controller = OpencvImageController()
-        application_engine.register_controller(interface_controller)
+        # interface_controller = OpencvImageController()
+        # application_engine.register_controller(interface_controller)
     else:
         console_controller = HeadlessController()
 

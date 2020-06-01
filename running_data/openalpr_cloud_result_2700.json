@@ -1,0 +1,314 @@
+{
+    "uuid": "",
+    "data_type": "alpr_results",
+    "epoch_time": 1591003121354,
+    "processing_time": {
+        "total": 464.37499999956344,
+        "plates": 60.70879364013672,
+        "vehicles": 54.35799999759183
+    },
+    "img_height": 1080,
+    "img_width": 1920,
+    "results": [
+        {
+            "plate": "ZPR916",
+            "confidence": 92.8975601196289,
+            "region_confidence": 97,
+            "vehicle_region": {
+                "y": 434,
+                "x": 233,
+                "height": 294,
+                "width": 294
+            },
+            "region": "au-vic",
+            "plate_index": 0,
+            "processing_time_ms": 19.253971099853516,
+            "candidates": [
+                {
+                    "matches_template": 0,
+                    "plate": "ZPR916",
+                    "confidence": 92.8975601196289
+                }
+            ],
+            "coordinates": [
+                {
+                    "y": 617,
+                    "x": 340
+                },
+                {
+                    "y": 618,
+                    "x": 420
+                },
+                {
+                    "y": 644,
+                    "x": 420
+                },
+                {
+                    "y": 643,
+                    "x": 339
+                }
+            ],
+            "vehicle": {
+                "orientation": [
+                    {
+                        "confidence": 99.70047760009766,
+                        "name": "0"
+                    },
+                    {
+                        "confidence": 0.11736717820167542,
+                        "name": "180"
+                    },
+                    {
+                        "confidence": 0.08909613639116287,
+                        "name": "45"
+                    },
+                    {
+                        "confidence": 0.0864412859082222,
+                        "name": "315"
+                    },
+                    {
+                        "confidence": 0.0027152530383318663,
+                        "name": "270"
+                    },
+                    {
+                        "confidence": 0.0016119114588946104,
+                        "name": "135"
+                    },
+                    {
+                        "confidence": 0.001067049684934318,
+                        "name": "90"
+                    },
+                    {
+                        "confidence": 0.0010060049826279283,
+                        "name": "225"
+                    },
+                    {
+                        "confidence": 0.00021850119810551405,
+                        "name": "missing"
+                    }
+                ],
+                "color": [
+                    {
+                        "confidence": 94.30211639404297,
+                        "name": "silver-gray"
+                    },
+                    {
+                        "confidence": 3.3859987258911133,
+                        "name": "gold-beige"
+                    },
+                    {
+                        "confidence": 1.1996723413467407,
+                        "name": "brown"
+                    },
+                    {
+                        "confidence": 0.47924691438674927,
+                        "name": "white"
+                    },
+                    {
+                        "confidence": 0.40923669934272766,
+                        "name": "blue"
+                    },
+                    {
+                        "confidence": 0.059245187789201736,
+                        "name": "green"
+                    },
+                    {
+                        "confidence": 0.058179765939712524,
+                        "name": "purple"
+                    },
+                    {
+                        "confidence": 0.04080721735954285,
+                        "name": "black"
+                    },
+                    {
+                        "confidence": 0.03296303004026413,
+                        "name": "red"
+                    },
+                    {
+                        "confidence": 0.023985907435417175,
+                        "name": "yellow"
+                    }
+                ],
+                "make": [
+                    {
+                        "confidence": 99.99427795410156,
+                        "name": "kia"
+                    },
+                    {
+                        "confidence": 0.005301870405673981,
+                        "name": "subaru"
+                    },
+                    {
+                        "confidence": 0.00024356061476282775,
+                        "name": "toyota"
+                    },
+                    {
+                        "confidence": 0.0001227314060088247,
+                        "name": "hyundai"
+                    },
+                    {
+                        "confidence": 8.432225513388403e-06,
+                        "name": "holden"
+                    },
+                    {
+                        "confidence": 7.87215140007902e-06,
+                        "name": "scion"
+                    },
+                    {
+                        "confidence": 7.054667094053002e-06,
+                        "name": "mazda"
+                    },
+                    {
+                        "confidence": 6.874467544548679e-06,
+                        "name": "great-wall"
+                    },
+                    {
+                        "confidence": 6.710778507112991e-06,
+                        "name": "ford"
+                    },
+                    {
+                        "confidence": 4.591232936945744e-06,
+                        "name": "skoda"
+                    }
+                ],
+                "body_type": [
+                    {
+                        "confidence": 99.8262939453125,
+                        "name": "sedan-standard"
+                    },
+                    {
+                        "confidence": 0.08678754419088364,
+                        "name": "sedan-wagon"
+                    },
+                    {
+                        "confidence": 0.08473002910614014,
+                        "name": "sedan-compact"
+                    },
+                    {
+                        "confidence": 0.0007889632834121585,
+                        "name": "suv-crossover"
+                    },
+                    {
+                        "confidence": 0.0007827936206012964,
+                        "name": "van-mini"
+                    },
+                    {
+                        "confidence": 0.00029887552955187857,
+                        "name": "sedan-convertible"
+                    },
+                    {
+                        "confidence": 0.0001729288778733462,
+                        "name": "sedan-sports"
+                    },
+                    {
+                        "confidence": 0.00013475731248036027,
+                        "name": "tractor-trailer"
+                    },
+                    {
+                        "confidence": 9.481411325396039e-06,
+                        "name": "motorcycle"
+                    },
+                    {
+                        "confidence": 4.891235676041106e-06,
+                        "name": "antique"
+                    }
+                ],
+                "year": [
+                    {
+                        "confidence": 83.30957794189453,
+                        "name": "2010-2014"
+                    },
+                    {
+                        "confidence": 16.591703414916992,
+                        "name": "2015-2019"
+                    },
+                    {
+                        "confidence": 0.09869194030761719,
+                        "name": "2005-2009"
+                    },
+                    {
+                        "confidence": 2.171567211917136e-05,
+                        "name": "2000-2004"
+                    },
+                    {
+                        "confidence": 2.5819025495366077e-07,
+                        "name": "1980-1984"
+                    },
+                    {
+                        "confidence": 2.450564977607428e-07,
+                        "name": "1995-1999"
+                    },
+                    {
+                        "confidence": 2.3564696505218308e-07,
+                        "name": "1990-1994"
+                    },
+                    {
+                        "confidence": 1.3940146459390235e-07,
+                        "name": "missing"
+                    },
+                    {
+                        "confidence": 1.2176542441011406e-07,
+                        "name": "1985-1989"
+                    }
+                ],
+                "make_model": [
+                    {
+                        "confidence": 98.4690933227539,
+                        "name": "kia_optima"
+                    },
+                    {
+                        "confidence": 1.0042779445648193,
+                        "name": "kia_cerato"
+                    },
+                    {
+                        "confidence": 0.43121016025543213,
+                        "name": "kia_rio"
+                    },
+                    {
+                        "confidence": 0.04256309196352959,
+                        "name": "kia_cadenza"
+                    },
+                    {
+                        "confidence": 0.03542361035943031,
+                        "name": "kia_forte"
+                    },
+                    {
+                        "confidence": 0.005049411673098803,
+                        "name": "kia_carens"
+                    },
+                    {
+                        "confidence": 0.0019498189212754369,
+                        "name": "kia_magentis"
+                    },
+                    {
+                        "confidence": 0.0017756741726770997,
+                        "name": "kia_sportage"
+                    },
+                    {
+                        "confidence": 0.001523028127849102,
+                        "name": "kia_k900"
+                    },
+                    {
+                        "confidence": 0.00145572773180902,
+                        "name": "kia_pro_ceed"
+                    }
+                ]
+            },
+            "matches_template": 0,
+            "requested_topn": 10
+        }
+    ],
+    "credits_monthly_used": 4,
+    "version": 2,
+    "credits_monthly_total": 50,
+    "error": false,
+    "regions_of_interest": [
+        {
+            "y": 0,
+            "x": 0,
+            "height": 1080,
+            "width": 1920
+        }
+    ],
+    "credit_cost": 1
+}

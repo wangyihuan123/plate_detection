@@ -6,8 +6,10 @@ import queue
 import cv2
 from .frame_data import FrameData
 
-TEST_FRAMES = [300, 1200, 1800, 2200, 2700, 3000, 3600, 4000, 4500]
+# TEST_FRAMES = [300, 1200, 1800, 2200, 2700, 3000, 3600, 4000, 4500]
+TEST_FRAMES = [1, 100, 4000, 4001, 4002, 4003, 4004]
 # TEST_PLATES = ["WAX081", "XFG774", "1HG9TF", "WCW856", "ZPR916", "1FL2KF", "1JQ7RG","unknown", "AXZ074"]  # the last second is unknown
+
 
 ROI_RATIO = 0.5
 
@@ -34,6 +36,13 @@ class FrameGrabber(object):
     def run(self):
         print("run frame_grabber")
         while self._running:
+
+            # only for testing
+            self._cap.set(cv2.CAP_PROP_POS_FRAMES, self._image_id-1)
+            self._image_id += 1
+            if self._image_id not in TEST_FRAMES:
+                continue
+
             try:
                 ret, frame = self._cap.read()
             except RuntimeError as e:
@@ -46,20 +55,18 @@ class FrameGrabber(object):
                 print("{} frames in the test video".format(self._image_id))  # 4681 frames in all
                 break
 
-            self._image_id += 1
 
-            # #############################33
-            self._image_id = 3000
-            test_image = "/home/eva/code/rushdigital/running_data/frame_" + str(self._image_id) + ".png"
-            frame = cv2.imread(test_image)
+            # #############################
+            # test_image = "/home/eva/code/rushdigital/running_data/frame_" + str(self._image_id) + ".png"
+            # frame = cv2.imread(test_image)
+
             if frame is None:
                 print("image is None")
                 print(self._image_id)
                 continue
 
-            # only for testing
-            # if self._image_id not in TEST_FRAMES:
-            #     continue
+            cv2.imshow('window_name', frame)
+            cv2.waitKey()
 
             if self._output_queue.full():
                 try:
@@ -71,7 +78,6 @@ class FrameGrabber(object):
             self._output_queue.put(
                 FrameData(frame, self._image_id, self._headless))
 
-            t.sleep(1000000) # stop here to save credit
 
     def start(self):
 
@@ -84,12 +90,11 @@ class FrameGrabber(object):
             return
 
 
-        cap = cv2.VideoCapture(TEST_VIDEO)  # in all 157 seconds
-        if not cap.isOpened():  # check if we succeeded
+        self._cap = cv2.VideoCapture(TEST_VIDEO)  # in all 157 seconds
+        if not self._cap.isOpened():  # check if we succeeded
             print("open video fail...")
             return
 
-        self._cap = cap
         self._running = True
         self._worker_thread = threading.Thread(target=self.run)
         self._worker_thread.start()

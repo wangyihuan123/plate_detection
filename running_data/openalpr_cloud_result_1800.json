@@ -1,0 +1,359 @@
+{
+    "uuid": "",
+    "data_type": "alpr_results",
+    "epoch_time": 1591002512787,
+    "processing_time": {
+        "total": 464.3519999954151,
+        "plates": 60.3871955871582,
+        "vehicles": 54.08200000238139
+    },
+    "img_height": 1080,
+    "img_width": 1920,
+    "results": [
+        {
+            "plate": "1HG9TF",
+            "confidence": 91.13179016113281,
+            "region_confidence": 99,
+            "vehicle_region": {
+                "y": 364,
+                "x": 1096,
+                "height": 312,
+                "width": 312
+            },
+            "region": "au-vic",
+            "plate_index": 0,
+            "processing_time_ms": 19.214733123779297,
+            "candidates": [
+                {
+                    "matches_template": 0,
+                    "plate": "1HG9TF",
+                    "confidence": 91.13179016113281
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1H9TF",
+                    "confidence": 76.89103698730469
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1HO9TF",
+                    "confidence": 76.41545867919922
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1HC9TF",
+                    "confidence": 76.3490219116211
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1HD9TF",
+                    "confidence": 76.17158508300781
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1HQ9TF",
+                    "confidence": 76.14474487304688
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1HN9TF",
+                    "confidence": 76.12995910644531
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1HS9TF",
+                    "confidence": 76.12921905517578
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1HE9TF",
+                    "confidence": 76.12875366210938
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "1HG9F",
+                    "confidence": 75.70905303955078
+                }
+            ],
+            "coordinates": [
+                {
+                    "y": 557,
+                    "x": 1214
+                },
+                {
+                    "y": 560,
+                    "x": 1291
+                },
+                {
+                    "y": 587,
+                    "x": 1290
+                },
+                {
+                    "y": 585,
+                    "x": 1213
+                }
+            ],
+            "vehicle": {
+                "orientation": [
+                    {
+                        "confidence": 98.70206451416016,
+                        "name": "0"
+                    },
+                    {
+                        "confidence": 0.4185805916786194,
+                        "name": "315"
+                    },
+                    {
+                        "confidence": 0.4135828912258148,
+                        "name": "45"
+                    },
+                    {
+                        "confidence": 0.29720813035964966,
+                        "name": "225"
+                    },
+                    {
+                        "confidence": 0.08110067248344421,
+                        "name": "180"
+                    },
+                    {
+                        "confidence": 0.06749201565980911,
+                        "name": "135"
+                    },
+                    {
+                        "confidence": 0.010963188484311104,
+                        "name": "270"
+                    },
+                    {
+                        "confidence": 0.005278239957988262,
+                        "name": "missing"
+                    },
+                    {
+                        "confidence": 0.003714177059009671,
+                        "name": "90"
+                    }
+                ],
+                "color": [
+                    {
+                        "confidence": 59.73579788208008,
+                        "name": "red"
+                    },
+                    {
+                        "confidence": 13.97812557220459,
+                        "name": "blue"
+                    },
+                    {
+                        "confidence": 13.521608352661133,
+                        "name": "black"
+                    },
+                    {
+                        "confidence": 9.411602020263672,
+                        "name": "white"
+                    },
+                    {
+                        "confidence": 0.9129759073257446,
+                        "name": "gold-beige"
+                    },
+                    {
+                        "confidence": 0.740130603313446,
+                        "name": "silver-gray"
+                    },
+                    {
+                        "confidence": 0.423550009727478,
+                        "name": "brown"
+                    },
+                    {
+                        "confidence": 0.39135733246803284,
+                        "name": "purple"
+                    },
+                    {
+                        "confidence": 0.3543921709060669,
+                        "name": "pink"
+                    },
+                    {
+                        "confidence": 0.21780987083911896,
+                        "name": "green"
+                    }
+                ],
+                "make": [
+                    {
+                        "confidence": 42.697994232177734,
+                        "name": "toyota"
+                    },
+                    {
+                        "confidence": 19.737262725830078,
+                        "name": "holden"
+                    },
+                    {
+                        "confidence": 17.095664978027344,
+                        "name": "nissan"
+                    },
+                    {
+                        "confidence": 7.9483723640441895,
+                        "name": "mazda"
+                    },
+                    {
+                        "confidence": 3.556201934814453,
+                        "name": "fiat"
+                    },
+                    {
+                        "confidence": 2.353766441345215,
+                        "name": "suzuki"
+                    },
+                    {
+                        "confidence": 0.806982696056366,
+                        "name": "jac"
+                    },
+                    {
+                        "confidence": 0.6775121092796326,
+                        "name": "kia"
+                    },
+                    {
+                        "confidence": 0.5566470623016357,
+                        "name": "honda"
+                    },
+                    {
+                        "confidence": 0.5117508769035339,
+                        "name": "daihatsu"
+                    }
+                ],
+                "body_type": [
+                    {
+                        "confidence": 84.83290100097656,
+                        "name": "van-mini"
+                    },
+                    {
+                        "confidence": 12.864701271057129,
+                        "name": "sedan-compact"
+                    },
+                    {
+                        "confidence": 1.9853419065475464,
+                        "name": "van-full"
+                    },
+                    {
+                        "confidence": 0.09026867151260376,
+                        "name": "sedan-standard"
+                    },
+                    {
+                        "confidence": 0.08473828434944153,
+                        "name": "tractor-trailer"
+                    },
+                    {
+                        "confidence": 0.0736866295337677,
+                        "name": "sedan-wagon"
+                    },
+                    {
+                        "confidence": 0.04534156993031502,
+                        "name": "suv-crossover"
+                    },
+                    {
+                        "confidence": 0.015243526548147202,
+                        "name": "suv-standard"
+                    },
+                    {
+                        "confidence": 0.0071153538301587105,
+                        "name": "truck-standard"
+                    },
+                    {
+                        "confidence": 0.00029111889307387173,
+                        "name": "motorcycle"
+                    }
+                ],
+                "year": [
+                    {
+                        "confidence": 83.95318603515625,
+                        "name": "2015-2019"
+                    },
+                    {
+                        "confidence": 16.036657333374023,
+                        "name": "2010-2014"
+                    },
+                    {
+                        "confidence": 0.009918381460011005,
+                        "name": "2005-2009"
+                    },
+                    {
+                        "confidence": 0.0001457471225876361,
+                        "name": "2000-2004"
+                    },
+                    {
+                        "confidence": 6.426626350730658e-05,
+                        "name": "1995-1999"
+                    },
+                    {
+                        "confidence": 8.662544132675976e-06,
+                        "name": "1990-1994"
+                    },
+                    {
+                        "confidence": 7.313889000215568e-06,
+                        "name": "1980-1984"
+                    },
+                    {
+                        "confidence": 1.4406379023057525e-06,
+                        "name": "1985-1989"
+                    },
+                    {
+                        "confidence": 1.391507339576492e-06,
+                        "name": "missing"
+                    }
+                ],
+                "make_model": [
+                    {
+                        "confidence": 24.912033081054688,
+                        "name": "honda_freed"
+                    },
+                    {
+                        "confidence": 23.097745895385742,
+                        "name": "fiat_doblo"
+                    },
+                    {
+                        "confidence": 9.262781143188477,
+                        "name": "toyota_avanza"
+                    },
+                    {
+                        "confidence": 4.836949348449707,
+                        "name": "dodge_promaster"
+                    },
+                    {
+                        "confidence": 4.431984901428223,
+                        "name": "toyota_sienta"
+                    },
+                    {
+                        "confidence": 4.351712226867676,
+                        "name": "nissan_serena"
+                    },
+                    {
+                        "confidence": 2.8144772052764893,
+                        "name": "toyota_yaris"
+                    },
+                    {
+                        "confidence": 2.4533607959747314,
+                        "name": "suzuki_wagon-r"
+                    },
+                    {
+                        "confidence": 1.4879356622695923,
+                        "name": "ford_transit"
+                    },
+                    {
+                        "confidence": 1.386717438697815,
+                        "name": "dacia_dokker"
+                    }
+                ]
+            },
+            "matches_template": 0,
+            "requested_topn": 10
+        }
+    ],
+    "credits_monthly_used": 2,
+    "version": 2,
+    "credits_monthly_total": 50,
+    "error": false,
+    "regions_of_interest": [
+        {
+            "y": 0,
+            "x": 0,
+            "height": 1080,
+            "width": 1920
+        }
+    ],
+    "credit_cost": 1
+}

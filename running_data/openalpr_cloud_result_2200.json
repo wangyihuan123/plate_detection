@@ -1,0 +1,324 @@
+{
+    "uuid": "",
+    "data_type": "alpr_results",
+    "epoch_time": 1591002857260,
+    "processing_time": {
+        "total": 466.71999999989566,
+        "plates": 59.98944854736328,
+        "vehicles": 54.40700000008292
+    },
+    "img_height": 1080,
+    "img_width": 1920,
+    "results": [
+        {
+            "plate": "WCW856",
+            "confidence": 92.91934204101562,
+            "region_confidence": 95,
+            "vehicle_region": {
+                "y": 501,
+                "x": 179,
+                "height": 324,
+                "width": 324
+            },
+            "region": "au-vic",
+            "plate_index": 0,
+            "processing_time_ms": 19.080137252807617,
+            "candidates": [
+                {
+                    "matches_template": 0,
+                    "plate": "WCW856",
+                    "confidence": 92.91934204101562
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "WCW56",
+                    "confidence": 77.25821685791016
+                },
+                {
+                    "matches_template": 0,
+                    "plate": "WCW956",
+                    "confidence": 77.10424041748047
+                }
+            ],
+            "coordinates": [
+                {
+                    "y": 703,
+                    "x": 297
+                },
+                {
+                    "y": 704,
+                    "x": 385
+                },
+                {
+                    "y": 732,
+                    "x": 385
+                },
+                {
+                    "y": 732,
+                    "x": 297
+                }
+            ],
+            "vehicle": {
+                "orientation": [
+                    {
+                        "confidence": 87.88800811767578,
+                        "name": "315"
+                    },
+                    {
+                        "confidence": 7.403258800506592,
+                        "name": "45"
+                    },
+                    {
+                        "confidence": 2.792309284210205,
+                        "name": "0"
+                    },
+                    {
+                        "confidence": 1.7756484746932983,
+                        "name": "225"
+                    },
+                    {
+                        "confidence": 0.08154842257499695,
+                        "name": "180"
+                    },
+                    {
+                        "confidence": 0.029659058898687363,
+                        "name": "270"
+                    },
+                    {
+                        "confidence": 0.023985059931874275,
+                        "name": "135"
+                    },
+                    {
+                        "confidence": 0.0055576516315341,
+                        "name": "missing"
+                    },
+                    {
+                        "confidence": 1.8807970263878815e-05,
+                        "name": "90"
+                    }
+                ],
+                "color": [
+                    {
+                        "confidence": 82.47962188720703,
+                        "name": "silver-gray"
+                    },
+                    {
+                        "confidence": 9.564846992492676,
+                        "name": "gold-beige"
+                    },
+                    {
+                        "confidence": 3.5603256225585938,
+                        "name": "blue"
+                    },
+                    {
+                        "confidence": 1.8895189762115479,
+                        "name": "white"
+                    },
+                    {
+                        "confidence": 0.78409743309021,
+                        "name": "red"
+                    },
+                    {
+                        "confidence": 0.6858577728271484,
+                        "name": "green"
+                    },
+                    {
+                        "confidence": 0.49933871626853943,
+                        "name": "purple"
+                    },
+                    {
+                        "confidence": 0.3165358304977417,
+                        "name": "black"
+                    },
+                    {
+                        "confidence": 0.11903978884220123,
+                        "name": "brown"
+                    },
+                    {
+                        "confidence": 0.05780133232474327,
+                        "name": "pink"
+                    }
+                ],
+                "make": [
+                    {
+                        "confidence": 99.99796295166016,
+                        "name": "mazda"
+                    },
+                    {
+                        "confidence": 0.0009817436803132296,
+                        "name": "toyota"
+                    },
+                    {
+                        "confidence": 0.0003760091494768858,
+                        "name": "hyundai"
+                    },
+                    {
+                        "confidence": 0.00025736159295774996,
+                        "name": "honda"
+                    },
+                    {
+                        "confidence": 0.00013907007814850658,
+                        "name": "lexus"
+                    },
+                    {
+                        "confidence": 0.00012208358384668827,
+                        "name": "nissan"
+                    },
+                    {
+                        "confidence": 6.006349212839268e-05,
+                        "name": "holden"
+                    },
+                    {
+                        "confidence": 4.048200571560301e-05,
+                        "name": "mercedes-benz"
+                    },
+                    {
+                        "confidence": 1.253522714250721e-05,
+                        "name": "opel"
+                    },
+                    {
+                        "confidence": 9.531324394629337e-06,
+                        "name": "proton"
+                    }
+                ],
+                "body_type": [
+                    {
+                        "confidence": 70.83891296386719,
+                        "name": "sedan-standard"
+                    },
+                    {
+                        "confidence": 25.130245208740234,
+                        "name": "sedan-compact"
+                    },
+                    {
+                        "confidence": 3.4060511589050293,
+                        "name": "sedan-wagon"
+                    },
+                    {
+                        "confidence": 0.5020788311958313,
+                        "name": "van-mini"
+                    },
+                    {
+                        "confidence": 0.04172566160559654,
+                        "name": "truck-standard"
+                    },
+                    {
+                        "confidence": 0.026088103652000427,
+                        "name": "suv-standard"
+                    },
+                    {
+                        "confidence": 0.015058780089020729,
+                        "name": "tractor-trailer"
+                    },
+                    {
+                        "confidence": 0.011513552628457546,
+                        "name": "sedan-sports"
+                    },
+                    {
+                        "confidence": 0.010137367993593216,
+                        "name": "suv-crossover"
+                    },
+                    {
+                        "confidence": 0.009118911810219288,
+                        "name": "sedan-convertible"
+                    }
+                ],
+                "year": [
+                    {
+                        "confidence": 62.97663879394531,
+                        "name": "2000-2004"
+                    },
+                    {
+                        "confidence": 29.128826141357422,
+                        "name": "2005-2009"
+                    },
+                    {
+                        "confidence": 6.795362949371338,
+                        "name": "2010-2014"
+                    },
+                    {
+                        "confidence": 1.078639030456543,
+                        "name": "1995-1999"
+                    },
+                    {
+                        "confidence": 0.0168361347168684,
+                        "name": "2015-2019"
+                    },
+                    {
+                        "confidence": 0.0031832747627049685,
+                        "name": "1990-1994"
+                    },
+                    {
+                        "confidence": 0.0003440560831222683,
+                        "name": "1985-1989"
+                    },
+                    {
+                        "confidence": 0.00014589411148335785,
+                        "name": "1980-1984"
+                    },
+                    {
+                        "confidence": 2.1977280994178727e-05,
+                        "name": "missing"
+                    }
+                ],
+                "make_model": [
+                    {
+                        "confidence": 60.93436050415039,
+                        "name": "mazda_6"
+                    },
+                    {
+                        "confidence": 15.987687110900879,
+                        "name": "mazda_3"
+                    },
+                    {
+                        "confidence": 14.65279483795166,
+                        "name": "mazda_atenza"
+                    },
+                    {
+                        "confidence": 1.5050448179244995,
+                        "name": "mazda_axela"
+                    },
+                    {
+                        "confidence": 1.346718668937683,
+                        "name": "mazda_mazda"
+                    },
+                    {
+                        "confidence": 1.156524896621704,
+                        "name": "mazda_mazda6"
+                    },
+                    {
+                        "confidence": 0.9659608006477356,
+                        "name": "mazda_3-sport"
+                    },
+                    {
+                        "confidence": 0.5637872219085693,
+                        "name": "mazda_323"
+                    },
+                    {
+                        "confidence": 0.524325966835022,
+                        "name": "mazda_atenza-sedan"
+                    },
+                    {
+                        "confidence": 0.45388707518577576,
+                        "name": "mazda_626"
+                    }
+                ]
+            },
+            "matches_template": 0,
+            "requested_topn": 10
+        }
+    ],
+    "credits_monthly_used": 3,
+    "version": 2,
+    "credits_monthly_total": 50,
+    "error": false,
+    "regions_of_interest": [
+        {
+            "y": 0,
+            "x": 0,
+            "height": 1080,
+            "width": 1920
+        }
+    ],
+    "credit_cost": 1
+}
