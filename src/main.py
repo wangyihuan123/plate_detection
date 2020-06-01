@@ -7,7 +7,7 @@ import sys
 import logging
 from logging.handlers import RotatingFileHandler
 from engine import ApplicationEngine
-from controllers import OpencvImageController, ConsoleController, HeadlessController
+from controllers import OpencvImageController, ConsoleController, HeadlessController, SqliteController
 # from controllers.console_controller import ConsoleController
 # from controllers.headless_controller import HeadlessController
 
@@ -49,6 +49,8 @@ def main():
 
     application_engine = ApplicationEngine()
 
+    sqlite_controller = SqliteController()
+
     if not run_headless:
         console_controller = ConsoleController()
         interface_controller = OpencvImageController()
@@ -56,6 +58,7 @@ def main():
     else:
         console_controller = HeadlessController()
 
+    application_engine.register_controller(sqlite_controller)
     application_engine.register_controller(console_controller)
     application_engine.start()
 

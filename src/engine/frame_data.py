@@ -2,11 +2,7 @@ import uuid
 import numpy as np
 import cv2
 import json
-
 import time
-
-# from rs_utils import project
-# from rs_utils import deproject
 
 
 class FrameData():

@@ -59,9 +59,8 @@ class EngineController(object):
     def notify_update_log(self, updated_log):
         self._logs[updated_log.uuid] = updated_log
 
-    def notify_trigger_state(self, triggerDown, trigger_uuid=None):
-        self._trigger_down = triggerDown
-
+    def notify_insert_sqlite(self, plate, plate_confidence, processing_time_ms, epoch_time):
+        pass
 
 
     def signal_shutdown(self):

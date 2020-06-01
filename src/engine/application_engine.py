@@ -1,3 +1,4 @@
+import json
 import uuid
 import traceback
 import weakref
@@ -9,8 +10,10 @@ import queue
 from controllers import EngineController
 from .frame_grabber import FrameGrabber
 from .jsonresult_testing_engine import JsonresultTestingEngine
+# from .openalpr_engine import OpenalprEngine
+from .preprocessing_engine import PreprocessingEngine
 
-MAX_FRAME_Q_SIZE = 2  # this is a buffer of how many frames to be latent with
+MAX_FRAME_Q_SIZE = 10  # this is a buffer of how many frames to be latent with
 MAX_COMMAND_Q_SIZE = 10
 
 MEASUREMENT_CONFIRMED = 2
@@ -114,7 +117,7 @@ class ApplicationEngine(threading.Thread):
         for e in self._queue_engines:
             e.start()
 
-        self._notify_controllers_of_state_update(ApplicationEngine.CONTROLLER_STATE_RUNNING_CAPTURE, "Capturing")
+        # self._notify_controllers_of_state_update(ApplicationEngine.CONTROLLER_STATE_RUNNING_CAPTURE, "Capturing")
 
         # self._notify_controllers_of_trigger_state(False)
         # self._notify_engines_of_trigger_state(False)
@@ -122,7 +125,7 @@ class ApplicationEngine(threading.Thread):
 
         capture_session_uuid = str(uuid.uuid4())
         current_trigger_uuid = str(uuid.uuid4())  # only for debug, should delete this later
-        self._notify_controllers_of_capture_start(capture_session_uuid)
+        # self._notify_controllers_of_capture_start(capture_session_uuid)
 
         print("start application_engine")
         while True:
@@ -131,18 +134,55 @@ class ApplicationEngine(threading.Thread):
             if not self._application_engine_frame_queue.empty():
                 nextFrame = self._application_engine_frame_queue.get(block=False)
                 if nextFrame is not None:
-                    self._notify_controllers_of_frame(nextFrame)
 
-                    if nextFrame.isCameraPoseOkay() and self._trigger_down:
-                        ticket, ticketCoordinates = nextFrame.getTicket()
-                        if self._current_ticket is None:
-                            self._current_ticket = ticket
-                        if ticket == self._current_ticket:
-                            self._add_scaled_log(current_trigger_uuid,
-                                                 capture_session_uuid,
-                                                 self._current_ticket,
-                                                 ticketCoordinates,
-                                                 nextFrame)
+                    # check all
+                    json_result = nextFrame.getDetectionResult()
+
+                    if json_result["error"] == "false":
+                        print(json_result["error_code"])
+                        print(json_result["error"])
+                        continue
+
+                    if json_result["results"] is None:
+                        print("No result from openalpr")
+                        continue
+
+                    print("************************************************")
+                    # print(json.dumps(json_result, indent=2))
+                    detected_objects = json_result["results"]
+
+                    # Since there may have several cars or plates in one image, or maybe video in the future
+                    # epoch time can be used to identify one request/response from alpr cloud api
+                    #
+                    epoch_time = json_result["epoch_time"]
+                    print("epoch_time", epoch_time)
+
+                    print("---------------------------------------")
+                    for car in detected_objects:
+                        plate = car["plate"]
+                        plate_confidence = car["confidence"]
+                        processing_time_ms = car["processing_time_ms"]
+                        print("[Plate]: {}, [Confidence]: {}, [Processing_time]: {}".format(plate, plate_confidence,
+                                                                                            processing_time_ms))
+
+                        # angle check: skip if  bad angle? 30 degree?
+                        # orientation = car["vehicle"]["orientation"][0]  # only get the orientation with the highest confidence
+                        # if orientation["confidence"] > 90:
+                        #     if orientation["name"] > 30:
+                        #         continue
+
+                        start_time = t.time()
+                        id = str(uuid.uuid4())
+                        self._notify_controllers_of_insert_sqlite(plate, plate_confidence, processing_time_ms, epoch_time)
+
+                        stop_time = t.time()
+                        sqlite_time = stop_time - start_time
+                        print("[Sqlite Time]: {}".format(sqlite_time))
+
+                    # other post-processing
+                    # self._notify_controllers_of_frame(nextFrame)
+
+
 
             if self._shutdown_cmd is not None:
                 return None
@@ -192,25 +232,12 @@ class ApplicationEngine(threading.Thread):
                 if cmd == EngineController.CMD_START_CAPTURE:
                     return self._state_func__run_capture
 
-
-
     def _notify_controllers_of_frame(self, frameData):
         for c in self._controllers[:]:
             try:
                 c.notify_frame_data(frameData)
             except ReferenceError:
                 self._controllers.remove(c)
-
-    def _notify_controllers_of_trigger_state(self, state, trigger_uuid=None):
-        for c in self._controllers[:]:
-            try:
-                c.notify_trigger_state(state, trigger_uuid)
-            except ReferenceError:
-                self._controllers.remove(c)
-
-    def _notify_engines_of_trigger_state(self, state):
-        for e in self._queue_engines:
-            e.notify_trigger_state(state)
 
     def _notify_controllers_of_shutdown(self):
         for c in self._controllers[:]:
@@ -226,50 +253,11 @@ class ApplicationEngine(threading.Thread):
             except ReferenceError:
                 self._controllers.remove(c)
 
-    def _notify_controllers_of_state_update(self, state, status_txt=""):
-        for c in self._controllers[:]:
-            try:
-                c.notify_state_update(state, status_txt)
-            except ReferenceError:
-                self._controllers.remove(c)
-
-    def _notify_controllers_of_capture_start(self, session_uuid=None):
+    def _notify_controllers_of_insert_sqlite(self, plate, plate_confidence, processing_time_ms, epoch_time):
 
         for c in self._controllers[:]:
             try:
-                c.notify_start_capture(session_uuid)
-            except ReferenceError:
-                self._controllers.remove(c)
-
-    def _notify_controllers_of_capture_completion(self):
-
-        for c in self._controllers[:]:
-            try:
-                c.notify_completed_capture()
-            except ReferenceError:
-                self._controllers.remove(c)
-
-    def _notify_controllers_of_aborted_capture(self):
-
-        for c in self._controllers[:]:
-            try:
-                c.notify_aborted_capture()
-            except ReferenceError:
-                self._controllers.remove(c)
-
-    def _notify_controllers_of_new_log(self, scaled_log):
-
-        for c in self._controllers[:]:
-            try:
-                c.notify_new_log(scaled_log)
-            except ReferenceError:
-                self._controllers.remove(c)
-
-    def _notify_controllers_of_update_log(self, scaled_log):
-
-        for c in self._controllers[:]:
-            try:
-                c.notify_update_log(scaled_log)
+                c.notify_insert_sqlite(plate, plate_confidence, processing_time_ms, epoch_time)
             except ReferenceError:
                 self._controllers.remove(c)
 
@@ -304,17 +292,29 @@ class ApplicationEngine(threading.Thread):
             try:
 
                 self._notify_controllers_of_start()
-                self._notify_controllers_of_state_update(ApplicationEngine.CONTROLLER_STATE_INACTIVE, "Initialising")
+                # self._notify_controllers_of_state_update(ApplicationEngine.CONTROLLER_STATE_INACTIVE, "Initialising")
+
+                # todo: move this part to _state_func__run_capture
 
                 # Create and Wire together the pipeline of engines
                 jsonresult_testing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
+                preprocessing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
 
-                # self._queue_engines.append(SqliteEngine(jsonresult_testing_frame_queue, self._application_engine_frame_queue))
                 self._queue_engines.append(JsonresultTestingEngine(jsonresult_testing_frame_queue, self._application_engine_frame_queue))
-                self._queue_engines.append(FrameGrabber(jsonresult_testing_frame_queue, self._headless))
+                self._queue_engines.append(PreprocessingEngine(preprocessing_frame_queue, jsonresult_testing_frame_queue))
+                self._queue_engines.append(FrameGrabber(preprocessing_frame_queue, self._headless))
+
+                # openalpr pipeline
+                # openalpr_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
+                # preprocessing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
+                #
+                # self._queue_engines.append(OpenalprEngine(openalpr_frame_queue, self._application_engine_frame_queue))
+                # self._queue_engines.append(PreprocessingEngine(preprocessing_frame_queue, openalpr_frame_queue))
+                # self._queue_engines.append(FrameGrabber(preprocessing_frame_queue, self._headless))
+                # todo:
 
                 # first state - enter IDLE
-                # state_func = self._state_func__idle
+                # state_func = self._state_func__test
                 state_func = self._state_func__run_capture
 
                 while state_func is not None:
@@ -328,10 +328,14 @@ class ApplicationEngine(threading.Thread):
             except:
                 self._log.error("ImageCaptureEngine.run() - unexpected exception \n %s" % traceback.format_exc())
         finally:
+
+            # todo: move this part to _state_func__run_capture
             while self._queue_engines:
                 e = self._queue_engines.pop(0)
                 try:
                     e.stop()
                 except Exception as e:
                     pass
+            # todo:
+
             self._notify_controllers_of_shutdown()

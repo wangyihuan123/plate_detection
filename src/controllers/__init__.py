@@ -4,3 +4,4 @@ from .threaded_engine_controller import ThreadedEngineController
 from .opencv_image_controller import OpencvImageController
 from .console_controller import ConsoleController
 from .headless_controller import HeadlessController
+from .sqlite_controller import SqliteController
