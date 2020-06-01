@@ -5,8 +5,7 @@ import time
 
 import cv2
 import requests
-from base_engine import BaseQueueEngine
-import sqlite3
+from .base_engine import BaseQueueEngine
 import uuid
 
 class OpenalprEngine(BaseQueueEngine):
@@ -16,11 +15,9 @@ class OpenalprEngine(BaseQueueEngine):
     def __init__(self, input_queue, output_queue):
         super(OpenalprEngine, self).__init__(input_queue, output_queue)
 
-        self.conn = sqlite3.connect(self.SQLITE3_DB)
 
-
-    @staticmethod
-    def openalpr_cloud(image, secret_key):
+    # @staticmethod
+    def openalpr_cloud(self, image, secret_key):
         success, encoded_image = cv2.imencode('.png', image)
         img_base64 = base64.b64encode(encoded_image.tobytes())
 
@@ -32,9 +29,6 @@ class OpenalprEngine(BaseQueueEngine):
         return None
 
     def process(self, nextFrame):
-
-        if not nextFrame.isCameraPoseOkay():
-            return
 
         frame = nextFrame.getTextureImage()
         image_id = nextFrame.getFrameId()
@@ -51,14 +45,14 @@ class OpenalprEngine(BaseQueueEngine):
 
         nextFrame.setDetectionResult(json_result)
 
-        # backup the jsonresult as a file for debugging and testing
-        jsonresult_name = "./running_data/openalpr_cloud_result_" + str(image_id) + ".json"
-        if os.path.exists(jsonresult_name):
-            return
+        # # backup the jsonresult as a file for debugging and testing
+        # jsonresult_name = "./running_data/openalpr_cloud_result_" + str(image_id) + ".json"
+        # if os.path.exists(jsonresult_name):
+        #     return
 
-        # write the result to a json file to save my cloud account credit
-        with open(jsonresult_name, 'w', encoding='utf-8') as f:
-            json.dump(json_result, f, ensure_ascii=False, indent=4)
+        # # write the result to a json file to save my cloud account credit
+        # with open(jsonresult_name, 'w', encoding='utf-8') as f:
+        #     json.dump(json_result, f, ensure_ascii=False, indent=4)
 
 
 

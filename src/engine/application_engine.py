@@ -11,6 +11,7 @@ from controllers import EngineController
 from .frame_grabber import FrameGrabber
 from .jsonresult_testing_engine import JsonresultTestingEngine
 # from .openalpr_engine import OpenalprEngine
+from .openalpr_engine import OpenalprEngine
 from .preprocessing_engine import PreprocessingEngine
 
 MAX_FRAME_Q_SIZE = 10  # this is a buffer of how many frames to be latent with
@@ -299,20 +300,20 @@ class ApplicationEngine(threading.Thread):
                 # todo: move this part to _state_func__run_capture
 
                 # Create and Wire together the pipeline of engines
-                jsonresult_testing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
-                preprocessing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
-
-                self._queue_engines.append(JsonresultTestingEngine(jsonresult_testing_frame_queue, self._application_engine_frame_queue))
-                self._queue_engines.append(PreprocessingEngine(preprocessing_frame_queue, jsonresult_testing_frame_queue))
-                self._queue_engines.append(FrameGrabber(preprocessing_frame_queue, self._headless))
-
-                # openalpr pipeline
-                # openalpr_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
+                # jsonresult_testing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
                 # preprocessing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
                 #
-                # self._queue_engines.append(OpenalprEngine(openalpr_frame_queue, self._application_engine_frame_queue))
-                # self._queue_engines.append(PreprocessingEngine(preprocessing_frame_queue, openalpr_frame_queue))
+                # self._queue_engines.append(JsonresultTestingEngine(jsonresult_testing_frame_queue, self._application_engine_frame_queue))
+                # self._queue_engines.append(PreprocessingEngine(preprocessing_frame_queue, jsonresult_testing_frame_queue))
                 # self._queue_engines.append(FrameGrabber(preprocessing_frame_queue, self._headless))
+
+                # openalpr pipeline
+                openalpr_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
+                preprocessing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
+
+                self._queue_engines.append(OpenalprEngine(openalpr_frame_queue, self._application_engine_frame_queue))
+                self._queue_engines.append(PreprocessingEngine(preprocessing_frame_queue, openalpr_frame_queue))
+                self._queue_engines.append(FrameGrabber(preprocessing_frame_queue, self._headless))
                 # todo:
 
                 # first state - enter IDLE

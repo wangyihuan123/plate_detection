@@ -77,8 +77,10 @@ class FilesystemController(ThreadedEngineController):
         detectionresult_filename = output_dir + os.sep + detectionresult_file_basename + "_" + suffix + json_extn
         if not os.path.exists(detectionresult_filename):
             detectionresult_json_data = json_result2
-            with open(detectionresult_filename, 'w') as detectionresult_file:
-                json.dump(detectionresult_json_data, detectionresult_file, ensure_ascii=False, indent=4)
+            with open(detectionresult_filename, 'w') as f:
+                json.dump(detectionresult_json_data, f, ensure_ascii=False, indent=4)
+
+        print(os.path.exists(detectionresult_filename))
 
     def disable(self):
         self._enabled = False

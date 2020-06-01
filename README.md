@@ -27,7 +27,9 @@ convert  sqlite engine to a controller
 refactoring engine and controller
 add filesystem controller for debugging and backup
 
-add openalpr engine to get other frames' json result from cloud
+
+
+add openalpr engine to get other frames' json result from openalpr cloud
 
 refactoring jsonresult_testing_engine for multple frames
 
