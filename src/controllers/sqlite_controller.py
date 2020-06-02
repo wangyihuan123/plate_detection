@@ -22,18 +22,10 @@ design this as a controller instead of an engine, because we don't need a real-t
 using queue for each tsqlite insert
 """
 
-SQLITE3_DB = str(pathlib.Path.cwd()) + "../../mydata.db"
+SQLITE3_DB = str(pathlib.Path.cwd()) + "/../mydata.db"
 
 class SqliteController(ThreadedEngineController):
     """
-    1.
-    2. The library creates a queue to manage multiple queries sent to the database.
-Instead of directly calling the sqlite3 interface, you will call the
-Sqlite3Worker which inserts your query into a Queue.Queue() object.  The queries
-are processed in the order that they are inserted into the queue (first in,
-first out).  In order to ensure that the multiple threads are managed in the
-same queue, you will need to pass the same Sqlite3Worker object to each thread.
-
     """
 
     def __init__(self):
@@ -50,12 +42,6 @@ same queue, you will need to pass the same Sqlite3Worker object to each thread.
         # The object was created in thread id 140557547521856 and this is thread id 140556750186240.
         # self.conn = sqlite3.connect(self.SQLITE3_DB)
 
-    # update summery txt log
-    def update_summary_file(self, file_job, summary_file):
-        file_job = os.path.basename(file_job)
-
-        with open(summary_file, "a") as f:
-            f.write(time.ctime() + "\t" + file_job + "\n")
 
     # sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread.
     # The object was created in thread id 140557547521856 and this is thread id 140556750186240.

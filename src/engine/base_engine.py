@@ -14,7 +14,6 @@ class BaseQueueEngine(object):
         self._output_queue = output_queue
         self._worker_thread = None
         self._running = False
-        self._trigger_down = False
         self._log = logging.getLogger()
 
     def start(self):
@@ -30,9 +29,6 @@ class BaseQueueEngine(object):
             self._worker_thread = None
             with self._output_queue.mutex:
                 self._output_queue.queue.clear()
-
-    def notify_trigger_state(self, state):
-        self._trigger_down = state
 
     def run(self):
         while self._running:

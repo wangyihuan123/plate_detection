@@ -12,28 +12,13 @@ import os
 import logging
 
 DATA_DIR = 'running_data'
-FILE_EXTENSIONS = ['*.jpg', '*.json', '*.npz']  # these type file will be uploaded to aws
-
-DEFAULT_REGION_NAME = 'ap-southeast-2'
-DEFAULT_AWS_ACCESS_KEY = 'AKIAJQBUX2SIGV2Z377Q'
-DEFAULT_AWS_SECRET_ACCESS_KEY = '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'
-DEFAULT_AWS_BUCKET_NAME = 'c3.scaling.images'
-
-date_format = '%Y-%m-%dT%H:%M:%S%z'
-
-
 image_extn = '.png'
 json_extn = '.json'
-depth_extn = '.npz'
 
 
 class FilesystemController(ThreadedEngineController):
     """
-    1. All the detectionresult json saved in the output_dir before upload
-    2. saved_summary.log and uploaded_summary.log record all the saved and uploaded files
-    3. heartbeat_run() only check whether or not we can contact aws S3 bucket
-    4. After being uploaded, the local files in output dir would be deleted
-
+    All the detectionresult json and image files saved in the output_dir for further review or test
     """
     def __init__(self):
 
@@ -45,7 +30,6 @@ class FilesystemController(ThreadedEngineController):
 
         output_dir = Path().resolve().parent
         output_dir = os.path.join(output_dir, DATA_DIR)
-        self._log.info(output_dir)
 
         if not os.path.isdir(output_dir):
             os.makedirs(output_dir)
@@ -80,46 +64,16 @@ class FilesystemController(ThreadedEngineController):
             with open(detectionresult_filename, 'w') as f:
                 json.dump(detectionresult_json_data, f, ensure_ascii=False, indent=4)
 
-        # print(os.path.exists(detectionresult_filename))
-        self._log.info(os.path.exists(detectionresult_filename))
 
     def disable(self):
         self._enabled = False
 
-    # def _spool_existing_jobs(self):
-    #
-    #     files = []
-    #     for extn in FILE_EXTENSIONS:
-    #         files.extend(glob.glob(self.output_dir + os.sep + extn))
-    #
-    #     for file in files:
-    #         self._work_q.put(file)
-    #
-    # def notify_start(self):
-    #     self._work_q = queue.Queue()
-    #
-    #     if self._enabled:
-    #         self._spool_existing_jobs()
-    #     ThreadedEngineController.notify_start(self)
-
-
-    def notify_start_capture(self, session_uuid):
-        self._sent_tickets = []
-        self._session_uuid = session_uuid
-
-    def notify_completed_capture(self):
-        self._sent_tickets = []
-        self._session_uuid = None
-
-    def notify_aborted_capture(self):
-        self._sent_tickets = []
-        self._session_uuid = None
 
     def notify_shutdown(self):
         self._engine_shutdown = True
 
 
-    def notify_save_files(self, frame):
+    def notify_frame_data(self, frame):
         image = frame.getImage()
         frame_id = frame.getFrameId()
         json_result3 = frame.getDetectionResult()

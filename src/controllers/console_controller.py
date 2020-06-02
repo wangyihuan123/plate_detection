@@ -18,8 +18,6 @@ class ConsoleController(EngineController):
         self._log = logging.getLogger()
 
     def run_main_loop(self):
-
-
         try:
             orig_settings = termios.tcgetattr(sys.stdin)
             new_settings = list(orig_settings)
@@ -48,25 +46,9 @@ class ConsoleController(EngineController):
                     # Mask out all but the equivalent ASCII key code in the low byte
                     k = ord(k) & 0xFF
                     if k == 32:  # SPACE
-
-                        if self._controller_state == engine.ApplicationEngine.CONTROLLER_STATE_IDLE:
-                            self.signal_start_capture()
-                        elif self._controller_state == engine.ApplicationEngine.CONTROLLER_STATE_RUNNING_CAPTURE:
-                            self.signal_complete_capture()
-
-                    elif k == ord('t'):
-                        self.signal_trigger_down()
-
-                    elif k == ord('y'):
-                        self.signal_trigger_up()
-
-                    elif k == 27:  # ESC
-                        if self._controller_state == engine.ApplicationEngine.CONTROLLER_STATE_RUNNING_CAPTURE:
-                            self.signal_abort_capture()
+                            self.signal_debug()
                     elif k == ord('q'):
                         self.signal_shutdown()
-                    elif k == ord('u'):
-                        self.signal_upload()
 
             except KeyboardInterrupt:
                     self.signal_shutdown()
@@ -74,18 +56,9 @@ class ConsoleController(EngineController):
             if orig_settings is not None:
                 termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)
 
-    def notify_state_update(self, state, status_txt=""):
-
-        self._controller_state = state
-
-        if state == engine.ApplicationEngine.CONTROLLER_STATE_IDLE:
-            self._log.info("Capture engine entering IDLE state")
-        elif state == engine.ApplicationEngine.CONTROLLER_STATE_RUNNING_CAPTURE:
-            self._log.info("Capture engine started CAPTURING")
-
     def notify_shutdown(self):
         super(ConsoleController, self).notify_shutdown()
-        self._log.info("Capture engine shutting down")
+        self._log.info("Application engine shutting down")
         # Interrupt stdin key reading loop in run().  thread.interrupt_main() doesn't work, but the following does.
         self._running = False
         os.kill(os.getpid(), signal.SIGINT)

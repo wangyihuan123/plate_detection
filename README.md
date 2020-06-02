@@ -115,10 +115,9 @@ todo: what command do we really need??
 
 add log system
 add opencv controller for debugging: display the detection area
-add console controller and commands for debugging  ??? why need this ??, Yes, so that sometimes we need to stop or frame by frame for debugging, 
-and we can also save the image by command??
-
 add shutdown function to end engines and controllers properly 
+add console controller and commands for debugging and shutdown command
+
 tidy up code
 
 

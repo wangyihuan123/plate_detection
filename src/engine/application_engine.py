@@ -21,21 +21,17 @@ class ApplicationEngine(threading.Thread):
     PLATE_CONFIRMED_TIMES = 2  # 2 for testing, 3 or more for release
     PLATE_CONFIDENCE_THRESHOLD = 60  # if the confidence is too low, it's better not to trust the result
 
-    def __init__(self, headless=False):
+    def __init__(self):
         threading.Thread.__init__(self)
 
-        self._headless = headless
         self._command_queue = queue.Queue(MAX_COMMAND_Q_SIZE)
         self._shutdown_cmd = None
         self._log = logging.getLogger()
         self._queue_engines = []
-
         self._application_engine_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
-
         self._controllers = []
-
+        self._debug = False
         self.dirty_exit = False
-
         self._plate = dict()
 
     def __del__(self):
@@ -133,7 +129,7 @@ class ApplicationEngine(threading.Thread):
                         # angle check: skip if  bad angle? 30 degree?
                         orientation = car["vehicle"]["orientation"][0]  # only get the orientation with the highest confidence
                         if orientation["confidence"] > 90:
-                            if orientation["name"] > 30:
+                            if int(orientation["name"]) > 30:
                                 good_detection_flag = False
                                 continue
 
@@ -152,10 +148,10 @@ class ApplicationEngine(threading.Thread):
 
                             print("Double/Triple confirmed", plate)
                             self._notify_controllers_of_insert_sqlite(plate, plate_confidence, processing_time_ms, epoch_time)
-                            self._notify_controllers_of_save_files(nextFrame)
 
-                    # other post-processing
-                    # self._notify_controllers_of_frame(nextFrame)
+                    self._notify_controllers_of_frame(nextFrame)
+
+                    # todo: other post-processing
 
             # check and clean all outdated records
             self.clean_outdated_plates()
@@ -167,9 +163,11 @@ class ApplicationEngine(threading.Thread):
             while not self._command_queue.empty():
                 cmd = self._command_queue.get(block=False)
 
-                if cmd == EngineController.CMD_COMPLETE_CAPTURE:
-                    self._notify_controllers_of_capture_completion()
-                    return None
+                if cmd == EngineController.CMD_DEBUG:
+                    print(self._debug)
+                    self._debug = not self._debug
+                    print("after", self._debug)
+                    self._notify_controllers_of_debug(self._debug)
 
 
     def _notify_controllers_of_frame(self, frameData):
@@ -201,11 +199,11 @@ class ApplicationEngine(threading.Thread):
             except ReferenceError:
                 self._controllers.remove(c)
 
-    def _notify_controllers_of_save_files(self, frames):
+    def _notify_controllers_of_debug(self, debug):
 
         for c in self._controllers[:]:
             try:
-                c.notify_save_files(frames)
+                c.notify_debug(debug)
             except ReferenceError:
                 self._controllers.remove(c)
 
@@ -215,7 +213,7 @@ class ApplicationEngine(threading.Thread):
 
         self._queue_engines.append(OpenalprEngine(openalpr_frame_queue, self._application_engine_frame_queue))
         self._queue_engines.append(PreprocessingEngine(preprocessing_frame_queue, openalpr_frame_queue))
-        self._queue_engines.append(FrameGrabber(preprocessing_frame_queue, self._headless))
+        self._queue_engines.append(FrameGrabber(preprocessing_frame_queue))
 
     def config_jsonresult_testing_pipeline(self):
         jsonresult_testing_frame_queue = queue.Queue(MAX_FRAME_Q_SIZE)
@@ -223,7 +221,7 @@ class ApplicationEngine(threading.Thread):
 
         self._queue_engines.append(JsonresultTestingEngine(jsonresult_testing_frame_queue, self._application_engine_frame_queue))
         self._queue_engines.append(PreprocessingEngine(preprocessing_frame_queue, jsonresult_testing_frame_queue))
-        self._queue_engines.append(FrameGrabber(preprocessing_frame_queue, self._headless))
+        self._queue_engines.append(FrameGrabber(preprocessing_frame_queue))
 
 
 
@@ -235,10 +233,10 @@ class ApplicationEngine(threading.Thread):
                 # Create and Wire together the pipeline of engines
 
                 # jsonresult pipeline for testing
-                # self.config_jsonresult_testing_pipeline()
+                self.config_jsonresult_testing_pipeline()
 
                 # openalpr pipeline
-                self.config_openalpr_pipeline()
+                # self.config_openalpr_pipeline()
                 # todo:
 
                 state_func = self.run_application

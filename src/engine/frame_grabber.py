@@ -20,10 +20,9 @@ class FrameGrabber(object):
 
     FPS = 30
 
-    def __init__(self, output_queue, headless):
+    def __init__(self, output_queue):
         super(FrameGrabber, self).__init__()
 
-        self._headless = headless
         self._output_queue = output_queue
 
         self._run_thread = False
@@ -33,7 +32,7 @@ class FrameGrabber(object):
         self._pipeline = None
         self._image_id = 0  # valid id start from 1
         self._cap = None
-        self.frames_dir = str(pathlib.Path.cwd()) + "../../running_data/"
+        self.frames_dir = str(pathlib.Path.cwd()) + "/../running_data/"
         self._log = logging.getLogger()
 
 
@@ -41,28 +40,29 @@ class FrameGrabber(object):
         self._log.info("run frame_grabber")
         while self._running:
 
-            # only for testing
-            self._cap.set(cv2.CAP_PROP_POS_FRAMES, self._image_id-1)
-            self._image_id += 1
-            if self._image_id not in TEST_FRAMES:
-                continue
-
-            try:
-                ret, frame = self._cap.read()
-            except RuntimeError as e:
-                self._log.info(e)
-                t.sleep(0.5)
-                continue
-
-            if ret is not True:
-                self._log.info("Ending")
-                self._log.info("{} frames in the test video".format(self._image_id))  # 4681 frames in all
-                break
+            # # only for testing
+            # self._cap.set(cv2.CAP_PROP_POS_FRAMES, self._image_id-1)
+            # self._image_id += 1
+            # if self._image_id not in TEST_FRAMES:
+            #     continue
+            #
+            # try:
+            #     ret, frame = self._cap.read()
+            # except RuntimeError as e:
+            #     self._log.info(e)
+            #     t.sleep(0.5)
+            #     continue
+            #
+            # if ret is not True:
+            #     self._log.info("Ending")
+            #     self._log.info("{} frames in the test video".format(self._image_id))  # 4681 frames in all
+            #     break
 
 
             # #############################
-            # test_image = pathlib.Path.joinpath(self.jsonresult_dir, "frame_" + str(self._image_id) + ".png")
-            # frame = cv2.imread(test_image)
+            self._image_id = 1200
+            test_image = self.frames_dir + "frame_" + str(self._image_id) + ".png"
+            frame = cv2.imread(test_image)
 
             if frame is None:
                 self._log.info("image is None")
@@ -76,7 +76,7 @@ class FrameGrabber(object):
                     pass
 
             self._output_queue.put(
-                FrameData(frame, self._image_id, self._headless))
+                FrameData(frame, self._image_id))
 
 
     def start(self):
