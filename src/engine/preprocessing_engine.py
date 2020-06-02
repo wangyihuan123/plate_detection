@@ -63,7 +63,7 @@ class PreprocessingEngine(BaseQueueEngine):
         if image_grey_value < self.GREYVALUE_THRESHOLD:
             return False
 
-        # check image quality: skip the blur image
+        # check image quality: skip the blurry image
         sharpness = cv2.Laplacian(image, cv2.CV_64F).var()
         if sharpness < self.SHARPNESS_THRESHOLD:
             return False
