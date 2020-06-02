@@ -47,7 +47,6 @@ class ConsoleController(EngineController):
 
                     # Mask out all but the equivalent ASCII key code in the low byte
                     k = ord(k) & 0xFF
-                    print(k)
                     if k == 32:  # SPACE
 
                         if self._controller_state == engine.ApplicationEngine.CONTROLLER_STATE_IDLE:
@@ -80,15 +79,12 @@ class ConsoleController(EngineController):
         self._controller_state = state
 
         if state == engine.ApplicationEngine.CONTROLLER_STATE_IDLE:
-            print("Capture engine entering IDLE state")
             self._log.info("Capture engine entering IDLE state")
         elif state == engine.ApplicationEngine.CONTROLLER_STATE_RUNNING_CAPTURE:
-            print("Capture engine started CAPTURING")
             self._log.info("Capture engine started CAPTURING")
 
     def notify_shutdown(self):
         super(ConsoleController, self).notify_shutdown()
-        print("Capture engine shutting down")
         self._log.info("Capture engine shutting down")
         # Interrupt stdin key reading loop in run().  thread.interrupt_main() doesn't work, but the following does.
         self._running = False

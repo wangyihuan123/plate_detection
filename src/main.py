@@ -7,8 +7,7 @@ import sys
 import logging
 from logging.handlers import RotatingFileHandler
 from engine import ApplicationEngine
-from controllers import OpencvImageController, ConsoleController, HeadlessController, SqliteController, FilesystemController
-import argparse
+from controllers import OpencvImageController, ConsoleController, SqliteController, FilesystemController
 
 
 TEST_FRAMES = [300, 1200, 1800, 2200, 2700, 3000, 3600, 4000, 4500]
@@ -18,7 +17,6 @@ LOGFILE_NAME = 'rushdigital.log'
 
 def main():
     logger = logging.getLogger()
-    # logger.setLevel(logging.DEBUG)  # too many boto3 debug print
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -32,27 +30,13 @@ def main():
 
     logger.info(message)
 
-    parser = argparse.ArgumentParser(description=message)
-
-    parser.add_argument(
-        '--headless',
-        action='store_true',
-        help='Run without the GUI image preview')
-
-    args = parser.parse_args()
-
-    run_headless = args.headless
-
     application_engine = ApplicationEngine()
     filesystem_controller = FilesystemController()
     sqlite_controller = SqliteController()
 
-    if not run_headless:
-        console_controller = ConsoleController()
-        # interface_controller = OpencvImageController()
-        # application_engine.register_controller(interface_controller)
-    else:
-        console_controller = HeadlessController()
+    console_controller = ConsoleController()
+    # interface_controller = OpencvImageController()
+    # application_engine.register_controller(interface_controller)
 
     application_engine.register_controller(filesystem_controller)
     application_engine.register_controller(sqlite_controller)

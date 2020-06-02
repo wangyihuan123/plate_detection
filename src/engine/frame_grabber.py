@@ -5,6 +5,7 @@ import time as t
 import queue
 import cv2
 from .frame_data import FrameData
+import logging
 
 # TEST_FRAMES = [300, 1200, 1800, 2200, 2700, 3000, 3600, 4000, 4500]
 TEST_FRAMES = [1, 100, 4000, 4001, 4002, 4003, 4004]
@@ -33,10 +34,11 @@ class FrameGrabber(object):
         self._image_id = 0  # valid id start from 1
         self._cap = None
         self.frames_dir = str(pathlib.Path.cwd()) + "../../running_data/"
+        self._log = logging.getLogger()
 
 
     def run(self):
-        print("run frame_grabber")
+        self._log.info("run frame_grabber")
         while self._running:
 
             # only for testing
@@ -48,13 +50,13 @@ class FrameGrabber(object):
             try:
                 ret, frame = self._cap.read()
             except RuntimeError as e:
-                print(e)
+                self._log.info(e)
                 t.sleep(0.5)
                 continue
 
             if ret is not True:
-                print("Ending")
-                print("{} frames in the test video".format(self._image_id))  # 4681 frames in all
+                self._log.info("Ending")
+                self._log.info("{} frames in the test video".format(self._image_id))  # 4681 frames in all
                 break
 
 
@@ -63,8 +65,8 @@ class FrameGrabber(object):
             # frame = cv2.imread(test_image)
 
             if frame is None:
-                print("image is None")
-                print(self._image_id)
+                self._log.info("image is None")
+                self._log.info(self._image_id)
                 continue
 
             if self._output_queue.full():
@@ -82,15 +84,15 @@ class FrameGrabber(object):
         # 4681 frames in 157 seconds, around 30 fps
         TEST_VIDEO = "../test_data/Ardeer.mp4"
         if not os.path.exists(TEST_VIDEO):
-            print("test video not exist")
-            print(pathlib.Path(__file__).parent.absolute())
-            print(pathlib.Path().absolute())
+            self._log.info("test video not exist")
+            self._log.info(pathlib.Path(__file__).parent.absolute())
+            self._log.info(pathlib.Path().absolute())
             return
 
 
         self._cap = cv2.VideoCapture(TEST_VIDEO)  # in all 157 seconds
         if not self._cap.isOpened():  # check if we succeeded
-            print("open video fail...")
+            self._log.info("open video fail...")
             return
 
         self._running = True

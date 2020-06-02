@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import math
 import time
-
+import logging
 # import geometry
 
 import engine
@@ -42,12 +42,14 @@ class OpencvImageController(ThreadedEngineController):
         cv2.namedWindow(WINDOW_NAME)
 
         self._image_to_show = None
+        self._log = logging.getLogger()
 
     def notify_state_update(self, state, status_txt=""):
         super(OpencvImageController, self).notify_state_update(state, status_txt)
 
         if state == engine.ApplicationEngine.CONTROLLER_STATE_IDLE:
-            print("opencv display init as blank")
+            # print("opencv display init as blank")
+            self._log.info("opencv display init as blank")
             cv2.imshow(WINDOW_NAME, np.zeros((100, 100, 3), np.uint8))
 
     def notify_frame_data(self, frameData):
@@ -55,17 +57,20 @@ class OpencvImageController(ThreadedEngineController):
         if len(image.shape) == 2:
             image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 
-        print("notify_frame_data")
+        # print("notify_frame_data")
+        self._log.info("notify_frame_data")
         self._image_to_show = image
 
     def run(self):
-        print(self._engine_shutdown)
+        # print(self._engine_shutdown)
+        self._log.info("self._engine_shutdown")
         while not self._engine_shutdown:
 
             if self._image_to_show is not None:
                 cv2.imshow(WINDOW_NAME, self._image_to_show)
                 self._image_to_show = None
-                print("image is not none")
+                # print("image is not none")
+                self._log.info("image is not none")
                 k = cv2.waitKey(1)
 
     def __del__(self):

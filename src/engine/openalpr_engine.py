@@ -7,6 +7,7 @@ import cv2
 import requests
 from .base_engine import BaseQueueEngine
 import uuid
+import logging
 
 class OpenalprEngine(BaseQueueEngine):
     # OPENALPR_CLOUD_SECRET_KEY = 'sk_013361c164cbbedb0b82f609'  #d
@@ -14,6 +15,7 @@ class OpenalprEngine(BaseQueueEngine):
 
     def __init__(self, input_queue, output_queue):
         super(OpenalprEngine, self).__init__(input_queue, output_queue)
+        self._log = logging.getLogger()
 
 
     # @staticmethod
@@ -37,10 +39,10 @@ class OpenalprEngine(BaseQueueEngine):
         json_result = self.openalpr_cloud(frame, self.OPENALPR_CLOUD_SECRET_KEY)
         stop_time = time.time()
         openalpr_time = stop_time - start_time
-        print("From cloud api - [Openalpr Time]: {}".format(openalpr_time), flush=True)
+        self._log.info("From cloud api - [Openalpr Time]: {}".format(openalpr_time), flush=True)
 
         if json_result is None:
-            print("Error Frame {}: json result from openalpr is None. ".format(image_id))
+            self._log.info("Error Frame {}: json result from openalpr is None. ".format(image_id))
             # leave the error to application_engine
 
         nextFrame.setDetectionResult(json_result)

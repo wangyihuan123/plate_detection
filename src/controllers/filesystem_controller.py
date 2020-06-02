@@ -45,7 +45,7 @@ class FilesystemController(ThreadedEngineController):
 
         output_dir = Path().resolve().parent
         output_dir = os.path.join(output_dir, DATA_DIR)
-        print(output_dir)
+        self._log.info(output_dir)
 
         if not os.path.isdir(output_dir):
             os.makedirs(output_dir)
@@ -80,7 +80,8 @@ class FilesystemController(ThreadedEngineController):
             with open(detectionresult_filename, 'w') as f:
                 json.dump(detectionresult_json_data, f, ensure_ascii=False, indent=4)
 
-        print(os.path.exists(detectionresult_filename))
+        # print(os.path.exists(detectionresult_filename))
+        self._log.info(os.path.exists(detectionresult_filename))
 
     def disable(self):
         self._enabled = False
