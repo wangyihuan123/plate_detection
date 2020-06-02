@@ -12,8 +12,6 @@ from .threaded_engine_controller import ThreadedEngineController
 
 WINDOW_NAME = "DISPLAY"
 
-
-
 class OpencvImageController(ThreadedEngineController):
     target_box_colour = (0, 255, 255)
 

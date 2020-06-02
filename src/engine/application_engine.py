@@ -14,8 +14,6 @@ from .preprocessing_engine import PreprocessingEngine
 MAX_FRAME_Q_SIZE = 10  # this is a buffer of how many frames to be latent with
 MAX_COMMAND_Q_SIZE = 10
 
-
-
 class ApplicationEngine(threading.Thread):
 
     PLATE_CONFIRMED_TIMES = 2  # 2 for testing, 3 or more for release
@@ -83,41 +81,35 @@ class ApplicationEngine(threading.Thread):
         for e in self._queue_engines:
             e.start()
 
+        self._log.info("start application_engine")
 
-        print("start application_engine")
         while True:
 
             # dequeue finished frames and notify controllers
             if not self._application_engine_frame_queue.empty():
                 nextFrame = self._application_engine_frame_queue.get(block=False)
                 if nextFrame is not None:
-
-                    # check all
                     json_result = nextFrame.getDetectionResult()
 
                     if json_result["error"] == "false":
-                        print(json_result["error_code"])
-                        print(json_result["error"])
+                        self._log.error("Json result error {}:{}".format(json_result["error_code"], json_result["error"]))
                         continue
 
                     if json_result["results"] is None:
-                        print("No result from openalpr")
+                        self._log.info("No result from openalpr")
                         continue
 
-                    print("************************************************")
-                    # print(json.dumps(json_result, indent=2))
                     detected_objects = json_result["results"]
 
                     # Since there may have several cars or plates in one image, or maybe video in the future
                     # epoch time can be used to identify one request/response from alpr cloud api
-                    #
                     epoch_time = json_result["epoch_time"]
 
                     if len(detected_objects) == 0:
                         # can't detect any plate
+                        self._log.info("can't detect any plate.")
                         continue
 
-                    print("---------------------------------------")
                     for car in detected_objects:
                         good_detection_flag = True
                         plate = car["plate"]  # todo: do I need to double check the plate?
@@ -134,8 +126,6 @@ class ApplicationEngine(threading.Thread):
                                 continue
 
                         processing_time_ms = car["processing_time_ms"]
-                        print("[Plate]: {}, [Confidence]: {}, [Processing_time]: {}".format(plate, plate_confidence,
-                                                                                            processing_time_ms))
 
                         # always update, but need to clean outdated records
                         if plate in self._plates:
@@ -145,10 +135,9 @@ class ApplicationEngine(threading.Thread):
                             self._plates[plate] = {"detected_times":1, "last_epoch_time": epoch_time}
 
                         if self._plates[plate]["detected_times"] >= self.PLATE_CONFIRMED_TIMES:
-
-                            print("Double/Triple confirmed", plate)
                             self._notify_controllers_of_insert_sqlite(plate, plate_confidence, processing_time_ms, epoch_time)
-
+                            self._log.info("insert sqlite data - [Plate]: {}, [Confidence]: {}, [Processing_time]: {}".
+                                           format(plate, plate_confidence, processing_time_ms))
                     self._notify_controllers_of_frame(nextFrame)
 
                     # todo: other post-processing
@@ -250,7 +239,7 @@ class ApplicationEngine(threading.Thread):
 
                 self.dirty_exit = True
             except:
-                self._log.error("ApplicationEngine.run() - unexpected exception \n %s" % traceback.format_exc())
+                self._log.error("ApplicationEngine.run() - unexpected exception \n {}".format(traceback.format_exc()))
         finally:
 
             while self._queue_engines:

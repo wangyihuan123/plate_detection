@@ -13,19 +13,13 @@ import os
 import logging
 import pathlib
 
-"""
-design this as a controller instead of an engine, because we don't need a real-time database at the moment. so, for simplicity move this from the engine pipeline to controller
-0. the goal is to build a small sqlite database manager
-1. create a thread to put the insert execution to support multi-threads condition, because we may do other query before the insertion
-2. the run check and loop each execution in the queue, there may have query, insert, update, or delete operations.
- 
-using queue for each tsqlite insert
-"""
 
 SQLITE3_DB = str(pathlib.Path.cwd()) + "/../mydata.db"
 
 class SqliteController(ThreadedEngineController):
     """
+    refactor this part as a controller instead of an engine, because we don't need a real-time database at the moment.
+    so, for simplicity move sqlite module from the engine pipeline to a controller
     """
 
     def __init__(self):
@@ -34,9 +28,7 @@ class SqliteController(ThreadedEngineController):
 
         self._engine_shutdown = False
         self._log = logging.getLogger()
-        self._work_q = None
         self._enabled = True
-        self._session_uuid = None
 
         # sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread.
         # The object was created in thread id 140557547521856 and this is thread id 140556750186240.
@@ -47,6 +39,7 @@ class SqliteController(ThreadedEngineController):
     # The object was created in thread id 140557547521856 and this is thread id 140556750186240.
     @staticmethod
     def application_engine_insert_sqlite(plate, plate_confidence, processing_time_ms, epoch_time):
+        # todo: migrate this later: https://github.com/palantir/sqlite3worker
 
         # this save should be finished even under the shutdown cmd
         conn = sqlite3.connect(SQLITE3_DB)
