@@ -79,6 +79,7 @@ class PreprocessingEngine(BaseQueueEngine):
         # a) speed up processing, and
         # b) skip, if the detected plate is out of our ROI
         image_roi = self.plate_roi_crop(image)
+        # image_roi = image
 
         nextFrame.updateImage(image_roi)
 

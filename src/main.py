@@ -35,8 +35,8 @@ def main():
     sqlite_controller = SqliteController()
 
     console_controller = ConsoleController()
-    # interface_controller = OpencvImageController()
-    # application_engine.register_controller(interface_controller)
+    interface_controller = OpencvImageController()
+    application_engine.register_controller(interface_controller)
 
     application_engine.register_controller(filesystem_controller)
     application_engine.register_controller(sqlite_controller)

@@ -3,7 +3,8 @@ import numpy as np
 import math
 import time
 import logging
-# import geometry
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 import engine
 
@@ -11,67 +12,42 @@ from .threaded_engine_controller import ThreadedEngineController
 
 WINDOW_NAME = "DISPLAY"
 
-TEXT_MARGIN = 10
-TEXT_ROW_1 = 20
-TEXT_ROW_2 = 40
-TEXT_ROW_3 = 60
-TEXT_ROW_4 = 80
-TEXT_ROW_5 = 100
-TEXT_ROW_6 = 120
-TEXT_ROW_7 = 140
-TEXT_ROW_8 = 160
-TEXT_ROW_9 = 180
-
-
-COLOUR_BLUE = (255, 0, 0)
-COLOUR_GREEN = (0, 255, 0)
-COLOUR_RED = (0, 0, 255)
-COLOUR_YELLOW = (0, 255, 255)
-COLOUR_WHITE = (255, 255, 255)
-
-
-COLOUR_GOOD = COLOUR_GREEN
-COLOUR_BAD = COLOUR_RED
 
 
 class OpencvImageController(ThreadedEngineController):
+    target_box_colour = (0, 255, 255)
 
     def __init__(self):
         super(OpencvImageController, self).__init__()
-
-        cv2.namedWindow(WINDOW_NAME)
-
         self._image_to_show = None
+        self._plate_coordinates = []  # [pt1, pt2, pt3, pt4]
+        self._vehicle_region = []  # [top_left_pt, bottom_right_tp]
         self._log = logging.getLogger()
 
-    def notify_state_update(self, state, status_txt=""):
-        super(OpencvImageController, self).notify_state_update(state, status_txt)
-
-        if state == engine.ApplicationEngine.CONTROLLER_STATE_IDLE:
-            # print("opencv display init as blank")
-            self._log.info("opencv display init as blank")
-            cv2.imshow(WINDOW_NAME, np.zeros((100, 100, 3), np.uint8))
 
     def notify_frame_data(self, frameData):
         image = frameData.getImage()
-        if len(image.shape) == 2:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+        # image = frameData.getDisplayImage()  # sometimes need original display image
 
-        # print("notify_frame_data")
-        self._log.info("notify_frame_data")
         self._image_to_show = image
+        jsonresult = frameData.getDetectionResult()
+        vehicle_region = jsonresult["results"][0]["vehicle_region"]
+        self._vehicle_region = [(vehicle_region["x"], vehicle_region["y"]),
+                                (vehicle_region["x"] + vehicle_region["width"], vehicle_region["y"] + vehicle_region["height"])]
+
+        # todo: display plate region as well
 
     def run(self):
-        # print(self._engine_shutdown)
-        self._log.info("self._engine_shutdown")
+        cv2.namedWindow(WINDOW_NAME)
         while not self._engine_shutdown:
 
             if self._image_to_show is not None:
+                cv2.rectangle(self._image_to_show, self._vehicle_region[0], self._vehicle_region[1],
+                              self.target_box_colour, 2)
+                # todo: display plate region as well
+
                 cv2.imshow(WINDOW_NAME, self._image_to_show)
-                self._image_to_show = None
-                # print("image is not none")
-                self._log.info("image is not none")
-                k = cv2.waitKey(1)
+                cv2.waitKey(100)
 
     def __del__(self):
         super(OpencvImageController, self).__del__()

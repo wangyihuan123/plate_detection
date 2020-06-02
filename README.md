@@ -51,7 +51,6 @@ This engines responsibility is to detect plates in the frame.  I adds the ticket
 
 This engines responsibility is to read image file and detection result json file from previous saving which is only for easy testing.
 
-###
 
 
 ## Controllers
