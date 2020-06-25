@@ -1,3 +1,6 @@
+ This is a simple application for real time vehicle plate recognition using cloud API(openalpr), opencv and postgreSQL.
+
+
 ## Version 0.2  
 
 ### Overview
